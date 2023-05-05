@@ -15,16 +15,36 @@
  * limitations under the License.
  */
 
-#include <core/platform/entrypoint.hpp>
+#include "vulkan/async/synchronization.hpp"
 
-#include <spdlog/sinks/stdout_color_sinks.h>
-
-#include <core/util/logging.hpp>
-
-#include "unix/context.hpp"
-
-std::unique_ptr<vkb::PlatformContext> create_platform_context(int argc, char **argv)
+namespace vkb
 {
-	vkb::initialize_logger({std::make_shared<spdlog::sinks::stdout_color_sink_mt>()});
-	return std::make_unique<vkb::UnixPlatformContext>(argc, argv);
+
+SynchronizationGroup::SynchronizationGroup(std::vector<SyncPtr> &&fences) :
+    fences{std::move(fences)}
+{}
+
+bool SynchronizationGroup::is_signaled() const
+{
+	for (const auto &fence : fences)
+	{
+		if (!fence->is_signaled())
+		{
+			return false;
+		}
+	}
+	return true;
 }
+
+bool SynchronizationGroup::wait_until(uint64_t timeout) const
+{
+	for (const auto &fence : fences)
+	{
+		if (!fence->wait_until(timeout))
+		{
+			return false;
+		}
+	}
+	return true;
+}
+}        // namespace vkb

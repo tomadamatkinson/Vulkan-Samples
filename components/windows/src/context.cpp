@@ -86,17 +86,5 @@ WindowsPlatformContext::WindowsPlatformContext(HINSTANCE hInstance, HINSTANCE hP
 	_external_storage_directory = "";
 	_temp_directory             = get_temp_path_from_environment();
 	_arguments                  = get_args();
-
-	// allocate a console for this app
-	// TODO: do we really need to do this?
-	// if (!AllocConsole())
-	// {
-	// 	throw std::runtime_error{"AllocConsole error"};
-	// }
-
-	// FILE *fp;
-	// freopen_s(&fp, "conin$", "r", stdin);
-	// freopen_s(&fp, "conout$", "w", stdout);
-	// freopen_s(&fp, "conout$", "w", stderr);
 }
 }        // namespace vkb

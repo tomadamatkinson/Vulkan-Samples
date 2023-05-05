@@ -52,8 +52,7 @@ std::string Platform::temp_directory = "";
 
 Platform::Platform(const PlatformContext &context)
 {
-	arguments = context.arguments();
-
+	arguments                  = context.arguments();
 	external_storage_directory = context.external_storage_directory();
 	temp_directory             = context.temp_directory();
 }

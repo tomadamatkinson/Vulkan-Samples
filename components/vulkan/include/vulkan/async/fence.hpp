@@ -15,16 +15,34 @@
  * limitations under the License.
  */
 
-#include <core/platform/entrypoint.hpp>
+#pragma once
 
-#include <spdlog/sinks/stdout_color_sinks.h>
+#include "vulkan/context.hpp"
 
-#include <core/util/logging.hpp>
+#include "vulkan/async/synchronization.hpp"
 
-#include "unix/context.hpp"
-
-std::unique_ptr<vkb::PlatformContext> create_platform_context(int argc, char **argv)
+namespace vkb
 {
-	vkb::initialize_logger({std::make_shared<spdlog::sinks::stdout_color_sink_mt>()});
-	return std::make_unique<vkb::UnixPlatformContext>(argc, argv);
-}
+
+class Fence final : public SynchronizationPoint
+{
+  public:
+	Fence(ContextPtr &context, vk::FenceCreateFlags flags = {});
+	~Fence();
+
+	bool is_signaled() const override;
+
+	bool wait_until(uint64_t timeout) const override;
+
+	vk::Fence release_handle();
+
+  private:
+	ContextPtr context;
+	vk::Fence  handle;
+
+	// used to track the state of the fence
+	mutable bool signaled{false};
+};
+
+using FencePtr = std::shared_ptr<Fence>;
+}        // namespace vkb

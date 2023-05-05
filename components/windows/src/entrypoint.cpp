@@ -17,10 +17,16 @@
 
 #include <core/platform/entrypoint.hpp>
 
-#include "windows/context.hpp"
 #include <Windows.h>
+#include <spdlog/sinks/stdout_color_sinks.h>
+
+#include <core/util/logging.hpp>
+
+#include "windows/context.hpp"
 
 std::unique_ptr<vkb::PlatformContext> create_platform_context(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR lpCmdLine, INT nCmdShow)
 {
+	vkb::initialize_logger({std::make_shared<spdlog::sinks::stdout_color_sink_mt>()});
+
 	return std::make_unique<vkb::WindowsPlatformContext>(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
 }

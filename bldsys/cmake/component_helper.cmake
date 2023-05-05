@@ -96,15 +96,21 @@ add_custom_target(vkb__tests)
 # Adds the test to the vkb__tests target
 # Uses Catch2 by default. If NO_CATCH2 is set, then the test must provide its own main function
 function(vkb__register_tests)
-    set(options NO_CATCH2)
+    set(options NO_CATCH2 GPU_ONLY)
     set(oneValueArgs COMPONENT NAME)
     set(multiValueArgs SRC HEADERS LINK_LIBS INCLUDE_DIRS)
 
-    if(NOT((CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME AND BUILD_TESTING) OR VKB_BUILD_TESTS))
-        return() # testing not enabled
-    endif()
-
     cmake_parse_arguments(TARGET "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+
+    if (TARGET_GPU_ONLY)
+        if(NOT((CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME AND BUILD_TESTING) OR VKB_BUILD_GPU_TESTS))
+            return() # testing not enabled
+        endif()
+    else()
+        if(NOT((CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME AND BUILD_TESTING) OR VKB_BUILD_TESTS))
+            return() # testing not enabled
+        endif()
+    endif()
 
     if(TARGET_NAME STREQUAL "")
         message(FATAL_ERROR "NAME must be defined in vkb__register_tests")
@@ -125,7 +131,7 @@ function(vkb__register_tests)
         add_executable(${TARGET_NAME} ${TARGET_SRC})
     endif()
 
-    if(NOT NO_CATCH2)
+    if(NOT TARGET_NO_CATCH2)
         target_link_libraries(${TARGET_NAME} PUBLIC Catch2::Catch2WithMain)
     endif()
 

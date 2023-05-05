@@ -22,6 +22,8 @@ vkb__register_component(
 
         include/core/util/error.hpp
         include/core/util/hash.hpp
+        include/core/util/logging.hpp
+        include/core/util/map.hpp
         include/core/util/profiling.hpp
         include/core/util/strings.hpp
     SRC

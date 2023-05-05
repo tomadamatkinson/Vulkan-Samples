@@ -17,9 +17,14 @@
 
 #include <core/platform/entrypoint.hpp>
 
+#include <spdlog/sinks/android_sink.h>
+
+#include <core/util/logging.hpp>
+
 #include "android/context.hpp"
 
 std::unique_ptr<vkb::PlatformContext> create_platform_context(android_app *app)
 {
+	vkb::initialize_logger({std::make_shared<spdlog::sinks::android_sink_mt>(PROJECT_NAME)});
 	return std::make_unique<vkb::AndroidPlatformContext>(app);
 }

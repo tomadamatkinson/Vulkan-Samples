@@ -1,4 +1,4 @@
-/* Copyright (c) 2023, Thomas Atkinson
+/* Copyright (c) 2018-2023, Arm Limited and Contributors
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -15,16 +15,31 @@
  * limitations under the License.
  */
 
-#include <core/platform/entrypoint.hpp>
+#pragma once
 
-#include <spdlog/sinks/stdout_color_sinks.h>
+#include <unordered_map>
 
-#include <core/util/logging.hpp>
-
-#include "unix/context.hpp"
-
-std::unique_ptr<vkb::PlatformContext> create_platform_context(int argc, char **argv)
+namespace vkb
 {
-	vkb::initialize_logger({std::make_shared<spdlog::sinks::stdout_color_sink_mt>()});
-	return std::make_unique<vkb::UnixPlatformContext>(argc, argv);
-}
+template <typename K, typename T, typename Container = std::unordered_map<K, T>>
+class Map : public Container
+{
+  public:
+	virtual ~Map() = default;
+
+	typename Container::iterator find_or_emplace(const K &key, const T &value = {})
+	{
+		auto it = Container::find(key);
+		if (it == Container::end())
+		{
+			it = Container::emplace(key, value).first;
+		}
+		return it;
+	}
+
+	bool contains(const K &key)
+	{
+		return Container::find(key) != Container::end();
+	}
+};
+}        // namespace vkb

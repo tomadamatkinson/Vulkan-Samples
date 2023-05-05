@@ -15,16 +15,9 @@
  * limitations under the License.
  */
 
-#include <core/platform/entrypoint.hpp>
+#pragma once
 
-#include <spdlog/sinks/stdout_color_sinks.h>
-
-#include <core/util/logging.hpp>
-
-#include "unix/context.hpp"
-
-std::unique_ptr<vkb::PlatformContext> create_platform_context(int argc, char **argv)
+namespace vkb
 {
-	vkb::initialize_logger({std::make_shared<spdlog::sinks::stdout_color_sink_mt>()});
-	return std::make_unique<vkb::UnixPlatformContext>(argc, argv);
-}
+
+};
