@@ -15,6 +15,8 @@
  * limitations under the License.
  */
 
+#include <gui/gui.hpp>
+
 #include "common/logging.h"
 #include "platform/platform.h"
 #include "plugins/plugins.h"
@@ -49,10 +51,14 @@ int main(int argc, char *argv[])
 
 	auto code = platform.initialize(plugins::get_all());
 
+	vkb::GUI::initialize();
+
 	if (code == vkb::ExitCode::Success)
 	{
 		code = platform.main_loop();
 	}
+
+	vkb::GUI::destroy();
 
 	platform.terminate(code);
 

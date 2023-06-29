@@ -122,32 +122,32 @@ bool HPPPipelineCache::prepare(const vkb::ApplicationOptions &options)
 
 void HPPPipelineCache::draw_gui()
 {
-	gui->show_options_window(
-	    /* body = */ [this]() {
-		    if (ImGui::Checkbox("Pipeline cache", &enable_pipeline_cache))
-		    {
-			    device->get_resource_cache().set_pipeline_cache(enable_pipeline_cache ? pipeline_cache : nullptr);
-		    }
+	// gui->show_options_window(
+	//     /* body = */ [this]() {
+	// 	    if (ImGui::Checkbox("Pipeline cache", &enable_pipeline_cache))
+	// 	    {
+	// 		    device->get_resource_cache().set_pipeline_cache(enable_pipeline_cache ? pipeline_cache : nullptr);
+	// 	    }
 
-		    ImGui::SameLine();
+	// 	    ImGui::SameLine();
 
-		    if (ImGui::Button("Destroy Pipelines", button_size))
-		    {
-			    device->get_handle().waitIdle();
-			    device->get_resource_cache().clear_pipelines();
-			    record_frame_time_next_frame = true;
-		    }
+	// 	    if (ImGui::Button("Destroy Pipelines", button_size))
+	// 	    {
+	// 		    device->get_handle().waitIdle();
+	// 		    device->get_resource_cache().clear_pipelines();
+	// 		    record_frame_time_next_frame = true;
+	// 	    }
 
-		    if (rebuild_pipelines_frame_time_ms > 0.0f)
-		    {
-			    ImGui::Text("Pipeline rebuild frame time: %.1f ms", rebuild_pipelines_frame_time_ms);
-		    }
-		    else
-		    {
-			    ImGui::Text("Pipeline rebuild frame time: N/A");
-		    }
-	    },
-	    /* lines = */ 2);
+	// 	    if (rebuild_pipelines_frame_time_ms > 0.0f)
+	// 	    {
+	// 		    ImGui::Text("Pipeline rebuild frame time: %.1f ms", rebuild_pipelines_frame_time_ms);
+	// 	    }
+	// 	    else
+	// 	    {
+	// 		    ImGui::Text("Pipeline rebuild frame time: N/A");
+	// 	    }
+	//     },
+	//     /* lines = */ 2);
 }
 
 void HPPPipelineCache::update(float delta_time)

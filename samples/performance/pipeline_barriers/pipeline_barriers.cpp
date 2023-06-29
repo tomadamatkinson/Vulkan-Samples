@@ -21,7 +21,7 @@
 #include "core/pipeline_layout.h"
 #include "core/shader_module.h"
 #include "gltf_loader.h"
-#include "gui.h"
+
 #include "platform/filesystem.h"
 
 #include "rendering/subpasses/forward_subpass.h"
@@ -105,7 +105,7 @@ bool PipelineBarriers::prepare(const vkb::ApplicationOptions &options)
 	                      vkb::StatIndex::gpu_fragment_cycles},
 	                     vkb::CounterSamplingConfig{vkb::CounterSamplingMode::Continuous});
 
-	gui = std::make_unique<vkb::Gui>(*this, *window, stats.get());
+	// gui = std::make_unique<vkb::Gui>(*this, *window, stats.get());
 
 	return true;
 }
@@ -297,10 +297,10 @@ void PipelineBarriers::draw(vkb::CommandBuffer &command_buffer, vkb::RenderTarge
 
 	lighting_pipeline.draw(command_buffer, get_render_context().get_active_frame().get_render_target());
 
-	if (gui)
-	{
-		gui->draw(command_buffer);
-	}
+	// if (gui)
+	// {
+	// 	// gui->draw(command_buffer);
+	// }
 
 	command_buffer.end_render_pass();
 
@@ -327,21 +327,21 @@ void PipelineBarriers::draw_gui()
 		lines++;
 	}
 
-	gui->show_options_window(
-	    /* body = */ [this, portrait_mode]() {
-		    ImGui::Text("Pipeline barrier stages:");
-		    ImGui::RadioButton("Bottom to top", reinterpret_cast<int *>(&dependency_type), DependencyType::BOTTOM_TO_TOP);
-		    ImGui::SameLine();
-		    ImGui::RadioButton("Frag to vert", reinterpret_cast<int *>(&dependency_type), DependencyType::FRAG_TO_VERT);
+	// gui->show_options_window(
+	//     /* body = */ [this, portrait_mode]() {
+	// 	    ImGui::Text("Pipeline barrier stages:");
+	// 	    ImGui::RadioButton("Bottom to top", reinterpret_cast<int *>(&dependency_type), DependencyType::BOTTOM_TO_TOP);
+	// 	    ImGui::SameLine();
+	// 	    ImGui::RadioButton("Frag to vert", reinterpret_cast<int *>(&dependency_type), DependencyType::FRAG_TO_VERT);
 
-		    if (!portrait_mode)
-		    {
-			    ImGui::SameLine();
-		    }
+	// 	    if (!portrait_mode)
+	// 	    {
+	// 		    ImGui::SameLine();
+	// 	    }
 
-		    ImGui::RadioButton("Frag to frag", reinterpret_cast<int *>(&dependency_type), DependencyType::FRAG_TO_FRAG);
-	    },
-	    /* lines = */ lines);
+	// 	    ImGui::RadioButton("Frag to frag", reinterpret_cast<int *>(&dependency_type), DependencyType::FRAG_TO_FRAG);
+	//     },
+	//     /* lines = */ lines);
 }
 
 std::unique_ptr<vkb::VulkanSample> create_pipeline_barriers()

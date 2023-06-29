@@ -988,42 +988,42 @@ void TimestampQueries::render(float delta_time)
 	}
 }
 
-void TimestampQueries::on_update_ui_overlay(vkb::Drawer &drawer)
+void TimestampQueries::on_update_ui_overlay()
 {
-	if (drawer.header("Settings"))
-	{
-		if (drawer.combo_box("Object type", &models.object_index, object_names))
-		{
-			update_uniform_buffers();
-			build_command_buffers();
-		}
-		if (drawer.input_float("Exposure", &ubo_params.exposure, 0.025f, 3))
-		{
-			update_params();
-		}
-		if (drawer.checkbox("Bloom", &bloom))
-		{
-			build_command_buffers();
-		}
-		if (drawer.checkbox("Skybox", &display_skybox))
-		{
-			build_command_buffers();
-		}
-	}
-	if (drawer.header("timing"))
-	{
-		// Timestamps don't have a time unit themselves, but are read as timesteps
-		// The timestampPeriod property of the device tells how many nanoseconds such a timestep translates to on the selected device
-		float timestampFrequency = device->get_gpu().get_properties().limits.timestampPeriod;
+	// if (drawer.header("Settings"))
+	// {
+	// 	if (drawer.combo_box("Object type", &models.object_index, object_names))
+	// 	{
+	// 		update_uniform_buffers();
+	// 		build_command_buffers();
+	// 	}
+	// 	if (drawer.input_float("Exposure", &ubo_params.exposure, 0.025f))
+	// 	{
+	// 		update_params();
+	// 	}
+	// 	if (drawer.checkbox("Bloom", &bloom))
+	// 	{
+	// 		build_command_buffers();
+	// 	}
+	// 	if (drawer.checkbox("Skybox", &display_skybox))
+	// 	{
+	// 		build_command_buffers();
+	// 	}
+	// }
+	// if (drawer.header("timing"))
+	// {
+	// 	// Timestamps don't have a time unit themselves, but are read as timesteps
+	// 	// The timestampPeriod property of the device tells how many nanoseconds such a timestep translates to on the selected device
+	// 	float timestampFrequency = device->get_gpu().get_properties().limits.timestampPeriod;
 
-		drawer.text("Pass 1: Offscreen scene rendering: %.3f ms", static_cast<float>(time_stamps[1] - time_stamps[0]) * timestampFrequency / 1000000.0f);
-		drawer.text("Pass 2: %s %.3f ms", (bloom ? "First bloom pass" : "Scene display"), static_cast<float>(time_stamps[3] - time_stamps[2]) * timestampFrequency / 1000000.0f);
-		if (bloom)
-		{
-			drawer.text("Pass 3: Second bloom pass %.3f ms", static_cast<float>(time_stamps[5] - time_stamps[4]) * timestampFrequency / 1000000.0f);
-			drawer.set_dirty(true);
-		}
-	}
+	// 	drawer.text("Pass 1: Offscreen scene rendering: %.3f ms", static_cast<float>(time_stamps[1] - time_stamps[0]) * timestampFrequency / 1000000.0f);
+	// 	drawer.text("Pass 2: %s %.3f ms", (bloom ? "First bloom pass" : "Scene display"), static_cast<float>(time_stamps[3] - time_stamps[2]) * timestampFrequency / 1000000.0f);
+	// 	if (bloom)
+	// 	{
+	// 		drawer.text("Pass 3: Second bloom pass %.3f ms", static_cast<float>(time_stamps[5] - time_stamps[4]) * timestampFrequency / 1000000.0f);
+	// 		drawer.set_dirty(true);
+	// 	}
+	// }
 }
 
 bool TimestampQueries::resize(const uint32_t width, const uint32_t height)

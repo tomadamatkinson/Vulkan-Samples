@@ -126,6 +126,17 @@ ShaderModule::ShaderModule(Device &device, VkShaderStageFlagBits stage, const Sh
 	                        reinterpret_cast<const char *>(spirv.data() + spirv.size())});
 }
 
+VkShaderModule ShaderModule::create_module(VkDevice device) const
+{
+	VkShaderModule           vk_shader_module;
+	VkShaderModuleCreateInfo module_create_info{};
+	module_create_info.sType    = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
+	module_create_info.codeSize = spirv.size() * sizeof(uint32_t);
+	module_create_info.pCode    = spirv.data();
+	VK_CHECK(vkCreateShaderModule(device, &module_create_info, NULL, &vk_shader_module));
+	return vk_shader_module;
+}
+
 ShaderModule::ShaderModule(ShaderModule &&other) :
     device{other.device},
     id{other.id},
@@ -162,11 +173,6 @@ const std::vector<ShaderResource> &ShaderModule::get_resources() const
 const std::string &ShaderModule::get_info_log() const
 {
 	return info_log;
-}
-
-const std::vector<uint32_t> &ShaderModule::get_binary() const
-{
-	return spirv;
 }
 
 void ShaderModule::set_resource_mode(const std::string &resource_name, const ShaderResourceMode &resource_mode)

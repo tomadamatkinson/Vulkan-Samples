@@ -35,7 +35,6 @@
 #include "common/vk_initializers.h"
 #include "core/buffer.h"
 #include "core/swapchain.h"
-#include "gui.h"
 #include "platform/platform.h"
 #include "rendering/render_context.h"
 #include "scene_graph/components/image.h"
@@ -360,7 +359,7 @@ class ApiVulkanSample : public vkb::VulkanSample
 	 * @brief Called when the UI overlay is updating, can be used to add custom elements to the overlay
 	 * @param drawer The drawer from the gui to draw certain elements
 	 */
-	virtual void on_update_ui_overlay(vkb::Drawer &drawer);
+	virtual void on_update_ui_overlay();
 
   private:
 	/** brief Indicates that the view (position, rotation) has changed and buffers containing camera matrices need to be updated */

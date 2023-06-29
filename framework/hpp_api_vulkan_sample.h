@@ -310,7 +310,7 @@ class HPPApiVulkanSample : public vkb::HPPVulkanSample
 	 * @brief Called when the UI overlay is updating, can be used to add custom elements to the overlay
 	 * @param drawer The drawer from the gui to draw certain elements
 	 */
-	virtual void on_update_ui_overlay(vkb::HPPDrawer &drawer);
+	virtual void on_update_ui_overlay();
 
   private:
 	/** brief Indicates that the view (position, rotation) has changed and buffers containing camera matrices need to be updated */

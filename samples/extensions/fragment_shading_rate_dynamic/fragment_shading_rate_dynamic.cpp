@@ -1184,37 +1184,37 @@ void FragmentShadingRateDynamic::render(float delta_time)
 	}
 }
 
-void FragmentShadingRateDynamic::on_update_ui_overlay(vkb::Drawer &drawer)
+void FragmentShadingRateDynamic::on_update_ui_overlay()
 {
-	if (drawer.header("Settings"))
-	{
-		if (drawer.checkbox("Enable attachment shading rate", &enable_attachment_shading_rate))
-		{
-			build_command_buffers();
-		}
+	// if (drawer.header("Settings"))
+	// {
+	// 	if (drawer.checkbox("Enable attachment shading rate", &enable_attachment_shading_rate))
+	// 	{
+	// 		build_command_buffers();
+	// 	}
 
-		static const std::vector<std::string> frequency_decimation_rates = {"1", "2", "4", "8", "16"};
+	// 	static const std::vector<std::string> frequency_decimation_rates = {"1", "2", "4", "8", "16"};
 
-		int32_t selection = std::min(static_cast<int32_t>(frequency_decimation_rates.size()) - 1,
-		                             static_cast<int32_t>(log2f(static_cast<float>(subpass_extent_ratio))));
-		if (drawer.combo_box("Subpass size reduction", &selection, frequency_decimation_rates))
-		{
-			subpass_extent_ratio = (1 << selection);
-			resize(width, height);
-		}
+	// 	int32_t selection = std::min(static_cast<int32_t>(frequency_decimation_rates.size()) - 1,
+	// 	                             static_cast<int32_t>(log2f(static_cast<float>(subpass_extent_ratio))));
+	// 	if (drawer.combo_box("Subpass size reduction", &selection, frequency_decimation_rates))
+	// 	{
+	// 		subpass_extent_ratio = (1 << selection);
+	// 		resize(width, height);
+	// 	}
 
-		static const std::vector<std::string> shading_rate_names = {"Render output", "Shading Rates",
-		                                                            "Frequency channel"};
-		if (drawer.combo_box("Data visualize", &ubo_scene.color_shading_rate, shading_rate_names))
-		{
-			update_uniform_buffers();
-		}
+	// 	static const std::vector<std::string> shading_rate_names = {"Render output", "Shading Rates",
+	// 	                                                            "Frequency channel"};
+	// 	if (drawer.combo_box("Data visualize", &ubo_scene.color_shading_rate, shading_rate_names))
+	// 	{
+	// 		update_uniform_buffers();
+	// 	}
 
-		if (drawer.checkbox("sky-sphere", &display_sky_sphere))
-		{
-			build_command_buffers();
-		}
-	}
+	// 	if (drawer.checkbox("sky-sphere", &display_sky_sphere))
+	// 	{
+	// 		build_command_buffers();
+	// 	}
+	// }
 }
 
 bool FragmentShadingRateDynamic::resize(const uint32_t new_width, const uint32_t new_height)

@@ -143,7 +143,7 @@ class Portability : public ApiVulkanSample
 	void                            draw();
 	bool                            prepare(const vkb::ApplicationOptions &options) override;
 	void                            render(float delta_time) override;
-	void                            on_update_ui_overlay(vkb::Drawer &drawer) override;
+	void                            on_update_ui_overlay() override;
 	bool                            resize(const uint32_t width, const uint32_t height) override;
 };
 

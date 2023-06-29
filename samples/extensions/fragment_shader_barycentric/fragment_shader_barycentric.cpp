@@ -368,18 +368,18 @@ void FragmentShaderBarycentric::render(float delta_time)
 }
 
 /**
- * @fn void FragmentShaderBarycentric::on_update_ui_overlay(vkb::Drawer &drawer)
+ * @fn void FragmentShaderBarycentric::on_update_ui_overlay()
  * @brief Projecting GUI and transferring data between GUI and application
  */
-void FragmentShaderBarycentric::on_update_ui_overlay(vkb::Drawer &drawer)
+void FragmentShaderBarycentric::on_update_ui_overlay()
 {
-	if (drawer.header("Settings"))
-	{
-		if (drawer.combo_box("Effects", &gui_settings.selected_effect, gui_settings.effect_names))
-		{
-			build_command_buffers();
-		}
-	}
+	// if (drawer.header("Settings"))
+	// {
+	// 	if (drawer.combo_box("Effects", &gui_settings.selected_effect, gui_settings.effect_names))
+	// 	{
+	// 		build_command_buffers();
+	// 	}
+	// }
 }
 
 /**

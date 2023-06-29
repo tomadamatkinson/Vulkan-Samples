@@ -175,34 +175,34 @@ void HPPTerrainTessellation::build_command_buffers()
 	}
 }
 
-void HPPTerrainTessellation::on_update_ui_overlay(vkb::HPPDrawer &drawer)
+void HPPTerrainTessellation::on_update_ui_overlay()
 {
-	if (drawer.header("Settings"))
-	{
-		if (drawer.checkbox("Tessellation", &tessellation))
-		{
-			update_uniform_buffers();
-		}
-		if (drawer.input_float("Factor", &ubo_tess.tessellation_factor, 0.05f, 2))
-		{
-			update_uniform_buffers();
-		}
-		if (get_device()->get_gpu().get_features().fillModeNonSolid)
-		{
-			if (drawer.checkbox("Wireframe", &wireframe))
-			{
-				build_command_buffers();
-			}
-		}
-	}
-	if (get_device()->get_gpu().get_features().pipelineStatisticsQuery)
-	{
-		if (drawer.header("Pipeline statistics"))
-		{
-			drawer.text("VS invocations: %d", pipeline_stats[0]);
-			drawer.text("TE invocations: %d", pipeline_stats[1]);
-		}
-	}
+	// if (drawer.header("Settings"))
+	// {
+	// 	if (drawer.checkbox("Tessellation", &tessellation))
+	// 	{
+	// 		update_uniform_buffers();
+	// 	}
+	// 	if (drawer.input_float("Factor", &ubo_tess.tessellation_factor, 0.05f))
+	// 	{
+	// 		update_uniform_buffers();
+	// 	}
+	// 	if (get_device()->get_gpu().get_features().fillModeNonSolid)
+	// 	{
+	// 		if (drawer.checkbox("Wireframe", &wireframe))
+	// 		{
+	// 			build_command_buffers();
+	// 		}
+	// 	}
+	// }
+	// if (get_device()->get_gpu().get_features().pipelineStatisticsQuery)
+	// {
+	// 	if (drawer.header("Pipeline statistics"))
+	// 	{
+	// 		drawer.text("VS invocations: %d", pipeline_stats[0]);
+	// 		drawer.text("TE invocations: %d", pipeline_stats[1]);
+	// 	}
+	// }
 }
 
 void HPPTerrainTessellation::render(float delta_time)

@@ -19,9 +19,7 @@
 
 #include "common/vk_common.h"
 #include "gltf_loader.h"
-#include "gui.h"
 #include "platform/filesystem.h"
-
 #include "rendering/subpasses/forward_subpass.h"
 #include "stats/stats.h"
 
@@ -42,12 +40,12 @@ void RenderPassesSample::reset_stats_view()
 {
 	if (load.value == VK_ATTACHMENT_LOAD_OP_LOAD)
 	{
-		gui->get_stats_view().reset_max_value(vkb::StatIndex::gpu_ext_read_bytes);
+		// gui->get_stats_view().reset_max_value(vkb::StatIndex::gpu_ext_read_bytes);
 	}
 
 	if (store.value == VK_ATTACHMENT_STORE_OP_STORE)
 	{
-		gui->get_stats_view().reset_max_value(vkb::StatIndex::gpu_ext_write_bytes);
+		// gui->get_stats_view().reset_max_value(vkb::StatIndex::gpu_ext_write_bytes);
 	}
 }
 
@@ -60,42 +58,42 @@ void RenderPassesSample::draw_gui()
 		lines = lines * 2;
 	}
 
-	gui->show_options_window(
-	    /* body = */ [this, lines]() {
-		    // Checkbox vkCmdClear
-		    ImGui::Checkbox("Use vkCmdClearAttachments (color)", &cmd_clear);
+	// gui->show_options_window(
+	//     /* body = */ [this, lines]() {
+	// 	    // Checkbox vkCmdClear
+	// 	    ImGui::Checkbox("Use vkCmdClearAttachments (color)", &cmd_clear);
 
-		    // For every option set
-		    for (size_t i = 0; i < radio_buttons.size(); ++i)
-		    {
-			    // Avoid conflicts between buttons with identical labels
-			    ImGui::PushID(vkb::to_u32(i));
+	// 	    // For every option set
+	// 	    for (size_t i = 0; i < radio_buttons.size(); ++i)
+	// 	    {
+	// 		    // Avoid conflicts between buttons with identical labels
+	// 		    ImGui::PushID(vkb::to_u32(i));
 
-			    auto &radio_button = radio_buttons[i];
+	// 		    auto &radio_button = radio_buttons[i];
 
-			    ImGui::Text("%s: ", radio_button->description);
+	// 		    ImGui::Text("%s: ", radio_button->description);
 
-			    if (camera->get_aspect_ratio() > 1.0f)
-			    {
-				    // In landscape, show all options following the heading
-				    ImGui::SameLine();
-			    }
+	// 		    if (camera->get_aspect_ratio() > 1.0f)
+	// 		    {
+	// 			    // In landscape, show all options following the heading
+	// 			    ImGui::SameLine();
+	// 		    }
 
-			    // For every option
-			    for (size_t j = 0; j < radio_button->options.size(); ++j)
-			    {
-				    ImGui::RadioButton(radio_button->options[j], &radio_button->value, vkb::to_u32(j));
+	// 		    // For every option
+	// 		    for (size_t j = 0; j < radio_button->options.size(); ++j)
+	// 		    {
+	// 			    ImGui::RadioButton(radio_button->options[j], &radio_button->value, vkb::to_u32(j));
 
-				    if (j < radio_button->options.size() - 1)
-				    {
-					    ImGui::SameLine();
-				    }
-			    }
+	// 			    if (j < radio_button->options.size() - 1)
+	// 			    {
+	// 				    ImGui::SameLine();
+	// 			    }
+	// 		    }
 
-			    ImGui::PopID();
-		    }
-	    },
-	    /* lines = */ vkb::to_u32(lines));
+	// 		    ImGui::PopID();
+	// 	    }
+	//     },
+	//     /* lines = */ vkb::to_u32(lines));
 }
 
 bool RenderPassesSample::prepare(const vkb::ApplicationOptions &options)
@@ -123,7 +121,7 @@ bool RenderPassesSample::prepare(const vkb::ApplicationOptions &options)
 
 	set_render_pipeline(std::move(render_pipeline));
 
-	gui = std::make_unique<vkb::Gui>(*this, *window, stats.get());
+	// gui = std::make_unique<vkb::Gui>(*this, *window, stats.get());
 
 	return true;
 }
@@ -168,7 +166,7 @@ void RenderPassesSample::draw_renderpass(vkb::CommandBuffer &command_buffer, vkb
 	assert(!subpasses.empty());
 	subpasses[0]->draw(command_buffer);
 
-	gui->draw(command_buffer);
+	// gui->draw(command_buffer);
 
 	command_buffer.end_render_pass();
 }

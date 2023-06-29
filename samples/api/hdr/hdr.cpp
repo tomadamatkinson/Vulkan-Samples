@@ -927,28 +927,28 @@ void HDR::render(float delta_time)
 	}
 }
 
-void HDR::on_update_ui_overlay(vkb::Drawer &drawer)
+void HDR::on_update_ui_overlay()
 {
-	if (drawer.header("Settings"))
-	{
-		if (drawer.combo_box("Object type", &models.object_index, object_names))
-		{
-			update_uniform_buffers();
-			build_command_buffers();
-		}
-		if (drawer.input_float("Exposure", &ubo_params.exposure, 0.025f, 3))
-		{
-			update_params();
-		}
-		if (drawer.checkbox("Bloom", &bloom))
-		{
-			build_command_buffers();
-		}
-		if (drawer.checkbox("Skybox", &display_skybox))
-		{
-			build_command_buffers();
-		}
-	}
+	// if (drawer.header("Settings"))
+	// {
+	// 	if (drawer.combo_box("Object type", &models.object_index, object_names))
+	// 	{
+	// 		update_uniform_buffers();
+	// 		build_command_buffers();
+	// 	}
+	// 	if (drawer.input_float("Exposure", &ubo_params.exposure, 0.025f))
+	// 	{
+	// 		update_params();
+	// 	}
+	// 	if (drawer.checkbox("Bloom", &bloom))
+	// 	{
+	// 		build_command_buffers();
+	// 	}
+	// 	if (drawer.checkbox("Skybox", &display_skybox))
+	// 	{
+	// 		build_command_buffers();
+	// 	}
+	// }
 }
 
 bool HDR::resize(const uint32_t width, const uint32_t height)

@@ -70,7 +70,7 @@ class GshaderToMshader : public ApiVulkanSample
 	void setup_descriptor_set_layout();
 	void setup_descriptor_sets();
 
-	virtual void on_update_ui_overlay(vkb::Drawer &drawer) override;
+	virtual void on_update_ui_overlay() override;
 	virtual bool resize(const uint32_t width, const uint32_t height) override;
 };
 

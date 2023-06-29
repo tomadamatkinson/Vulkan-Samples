@@ -54,9 +54,9 @@ const PipelineState &Pipeline::get_state() const
 	return state;
 }
 
-ComputePipeline::ComputePipeline(Device &        device,
+ComputePipeline::ComputePipeline(Device         &device,
                                  VkPipelineCache pipeline_cache,
-                                 PipelineState & pipeline_state) :
+                                 PipelineState  &pipeline_state) :
     Pipeline{device}
 {
 	const ShaderModule *shader_module = pipeline_state.get_pipeline_layout().get_shader_modules().front();
@@ -68,20 +68,9 @@ ComputePipeline::ComputePipeline(Device &        device,
 
 	VkPipelineShaderStageCreateInfo stage{VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO};
 
-	stage.stage = shader_module->get_stage();
-	stage.pName = shader_module->get_entry_point().c_str();
-
-	// Create the Vulkan handle
-	VkShaderModuleCreateInfo vk_create_info{VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO};
-
-	vk_create_info.codeSize = shader_module->get_binary().size() * sizeof(uint32_t);
-	vk_create_info.pCode    = shader_module->get_binary().data();
-
-	VkResult result = vkCreateShaderModule(device.get_handle(), &vk_create_info, nullptr, &stage.module);
-	if (result != VK_SUCCESS)
-	{
-		throw VulkanException{result};
-	}
+	stage.stage  = shader_module->get_stage();
+	stage.pName  = shader_module->get_entry_point().c_str();
+	stage.module = shader_module->create_module(device.get_handle());
 
 	device.get_debug_utils().set_debug_name(device.get_handle(),
 	                                        VK_OBJECT_TYPE_SHADER_MODULE, reinterpret_cast<uint64_t>(stage.module),
@@ -112,7 +101,7 @@ ComputePipeline::ComputePipeline(Device &        device,
 	create_info.layout = pipeline_state.get_pipeline_layout().get_handle();
 	create_info.stage  = stage;
 
-	result = vkCreateComputePipelines(device.get_handle(), pipeline_cache, 1, &create_info, nullptr, &handle);
+	VkResult result = vkCreateComputePipelines(device.get_handle(), pipeline_cache, 1, &create_info, nullptr, &handle);
 
 	if (result != VK_SUCCESS)
 	{
@@ -122,9 +111,9 @@ ComputePipeline::ComputePipeline(Device &        device,
 	vkDestroyShaderModule(device.get_handle(), stage.module, nullptr);
 }
 
-GraphicsPipeline::GraphicsPipeline(Device &        device,
+GraphicsPipeline::GraphicsPipeline(Device         &device,
                                    VkPipelineCache pipeline_cache,
-                                   PipelineState & pipeline_state) :
+                                   PipelineState  &pipeline_state) :
     Pipeline{device}
 {
 	std::vector<VkShaderModule> shader_modules;
@@ -153,20 +142,9 @@ GraphicsPipeline::GraphicsPipeline(Device &        device,
 	{
 		VkPipelineShaderStageCreateInfo stage_create_info{VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO};
 
-		stage_create_info.stage = shader_module->get_stage();
-		stage_create_info.pName = shader_module->get_entry_point().c_str();
-
-		// Create the Vulkan handle
-		VkShaderModuleCreateInfo vk_create_info{VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO};
-
-		vk_create_info.codeSize = shader_module->get_binary().size() * sizeof(uint32_t);
-		vk_create_info.pCode    = shader_module->get_binary().data();
-
-		VkResult result = vkCreateShaderModule(device.get_handle(), &vk_create_info, nullptr, &stage_create_info.module);
-		if (result != VK_SUCCESS)
-		{
-			throw VulkanException{result};
-		}
+		stage_create_info.stage  = shader_module->get_stage();
+		stage_create_info.pName  = shader_module->get_entry_point().c_str();
+		stage_create_info.module = shader_module->create_module(device.get_handle());
 
 		device.get_debug_utils().set_debug_name(device.get_handle(),
 		                                        VK_OBJECT_TYPE_SHADER_MODULE, reinterpret_cast<uint64_t>(stage_create_info.module),

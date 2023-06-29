@@ -18,7 +18,6 @@
 #include "subpasses.h"
 
 #include "common/vk_common.h"
-
 #include "rendering/pipeline_state.h"
 #include "rendering/render_context.h"
 #include "rendering/render_pipeline.h"
@@ -162,7 +161,7 @@ bool Subpasses::prepare(const vkb::ApplicationOptions &options)
 	                      vkb::StatIndex::gpu_ext_write_bytes});
 
 	// Enable gui
-	gui = std::make_unique<vkb::Gui>(*this, *window, stats.get());
+	// gui = std::make_unique<vkb::Gui>(*this, *window, stats.get());
 
 	return true;
 }
@@ -244,40 +243,40 @@ void Subpasses::draw_gui()
 		lines = lines * 2;
 	}
 
-	gui->show_options_window(
-	    /* body = */ [this, lines]() {
-		    // Create a line for every config
-		    for (size_t i = 0; i < configs.size(); ++i)
-		    {
-			    // Avoid conflicts between buttons with identical labels
-			    ImGui::PushID(vkb::to_u32(i));
+	// gui->show_options_window(
+	//     /* body = */ [this, lines]() {
+	// 	    // Create a line for every config
+	// 	    for (size_t i = 0; i < configs.size(); ++i)
+	// 	    {
+	// 		    // Avoid conflicts between buttons with identical labels
+	// 		    ImGui::PushID(vkb::to_u32(i));
 
-			    auto &config = configs[i];
+	// 		    auto &config = configs[i];
 
-			    ImGui::Text("%s: ", config.description);
+	// 		    ImGui::Text("%s: ", config.description);
 
-			    if (camera->get_aspect_ratio() > 1.0f)
-			    {
-				    // In landscape, show all options following the heading
-				    ImGui::SameLine();
-			    }
+	// 		    if (camera->get_aspect_ratio() > 1.0f)
+	// 		    {
+	// 			    // In landscape, show all options following the heading
+	// 			    ImGui::SameLine();
+	// 		    }
 
-			    // Create a radio button for every option
-			    for (size_t j = 0; j < config.options.size(); ++j)
-			    {
-				    ImGui::RadioButton(config.options[j], &config.value, vkb::to_u32(j));
+	// 		    // Create a radio button for every option
+	// 		    for (size_t j = 0; j < config.options.size(); ++j)
+	// 		    {
+	// 			    ImGui::RadioButton(config.options[j], &config.value, vkb::to_u32(j));
 
-				    // Keep it on the same line til the last one
-				    if (j < config.options.size() - 1)
-				    {
-					    ImGui::SameLine();
-				    }
-			    }
+	// 			    // Keep it on the same line til the last one
+	// 			    if (j < config.options.size() - 1)
+	// 			    {
+	// 				    ImGui::SameLine();
+	// 			    }
+	// 		    }
 
-			    ImGui::PopID();
-		    }
-	    },
-	    /* lines = */ vkb::to_u32(lines));
+	// 		    ImGui::PopID();
+	// 	    }
+	//     },
+	//     /* lines = */ vkb::to_u32(lines));
 }
 
 std::unique_ptr<vkb::RenderPipeline> Subpasses::create_one_renderpass_two_subpasses()
@@ -357,7 +356,7 @@ std::unique_ptr<vkb::RenderPipeline> Subpasses::create_lighting_renderpass()
 	return lighting_render_pipeline;
 }
 
-void draw_pipeline(vkb::CommandBuffer &command_buffer, vkb::RenderTarget &render_target, vkb::RenderPipeline &render_pipeline, vkb::Gui *gui = nullptr)
+void draw_pipeline(vkb::CommandBuffer &command_buffer, vkb::RenderTarget &render_target, vkb::RenderPipeline &render_pipeline)
 {
 	auto &extent = render_target.get_extent();
 
@@ -374,17 +373,17 @@ void draw_pipeline(vkb::CommandBuffer &command_buffer, vkb::RenderTarget &render
 
 	render_pipeline.draw(command_buffer, render_target);
 
-	if (gui)
-	{
-		gui->draw(command_buffer);
-	}
+	// if (gui)
+	// {
+	// 	// gui->draw(command_buffer);
+	// }
 
 	command_buffer.end_render_pass();
 }
 
 void Subpasses::draw_subpasses(vkb::CommandBuffer &command_buffer, vkb::RenderTarget &render_target)
 {
-	draw_pipeline(command_buffer, render_target, *render_pipeline, gui.get());
+	draw_pipeline(command_buffer, render_target, *render_pipeline);
 }
 
 void Subpasses::draw_renderpasses(vkb::CommandBuffer &command_buffer, vkb::RenderTarget &render_target)
@@ -423,7 +422,7 @@ void Subpasses::draw_renderpasses(vkb::CommandBuffer &command_buffer, vkb::Rende
 	}
 
 	// Second render pass
-	draw_pipeline(command_buffer, render_target, *lighting_render_pipeline, gui.get());
+	draw_pipeline(command_buffer, render_target, *lighting_render_pipeline);
 }
 
 void Subpasses::draw_renderpass(vkb::CommandBuffer &command_buffer, vkb::RenderTarget &render_target)

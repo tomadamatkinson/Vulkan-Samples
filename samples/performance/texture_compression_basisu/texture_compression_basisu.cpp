@@ -666,26 +666,26 @@ void TextureCompressionBasisu::view_changed()
 	update_uniform_buffers();
 }
 
-void TextureCompressionBasisu::on_update_ui_overlay(vkb::Drawer &drawer)
+void TextureCompressionBasisu::on_update_ui_overlay()
 {
-	if (drawer.header("Input"))
-	{
-		drawer.text("Input image:");
-		ImGui::PushItemWidth(180);
-		drawer.combo_box("##img", &selected_input_texture, texture_file_names);
-		ImGui::PopItemWidth();
-		drawer.text("Transcode target:");
-		ImGui::PushItemWidth(180);
-		drawer.combo_box("##tt", &selected_transcode_target_format, available_target_formats_names);
-		ImGui::PopItemWidth();
-		if (drawer.button("Transcode"))
-		{
-			vkQueueWaitIdle(queue);
-			transcode_texture(texture_file_names[selected_input_texture], available_target_formats[selected_transcode_target_format]);
-			update_image_descriptor();
-		}
-		drawer.text("Transcoded in %.2f ms", last_transcode_time);
-	}
+	// if (drawer.header("Input"))
+	// {
+	// 	drawer.text("Input image:");
+	// 	ImGui::PushItemWidth(180);
+	// 	drawer.combo_box("##img", &selected_input_texture, texture_file_names);
+	// 	ImGui::PopItemWidth();
+	// 	drawer.text("Transcode target:");
+	// 	ImGui::PushItemWidth(180);
+	// 	drawer.combo_box("##tt", &selected_transcode_target_format, available_target_formats_names);
+	// 	ImGui::PopItemWidth();
+	// 	if (drawer.button("Transcode"))
+	// 	{
+	// 		vkQueueWaitIdle(queue);
+	// 		transcode_texture(texture_file_names[selected_input_texture], available_target_formats[selected_transcode_target_format]);
+	// 		update_image_descriptor();
+	// 	}
+	// 	drawer.text("Transcoded in %.2f ms", last_transcode_time);
+	// }
 }
 
 std::unique_ptr<vkb::Application> create_texture_compression_basisu()

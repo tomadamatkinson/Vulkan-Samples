@@ -522,12 +522,12 @@ void Instancing::render(float delta_time)
 	}
 }
 
-void Instancing::on_update_ui_overlay(vkb::Drawer &drawer)
+void Instancing::on_update_ui_overlay()
 {
-	if (drawer.header("Statistics"))
-	{
-		drawer.text("Instances: %d", INSTANCE_COUNT);
-	}
+	// if (drawer.header("Statistics"))
+	// {
+	// 	drawer.text("Instances: %d", INSTANCE_COUNT);
+	// }
 }
 
 bool Instancing::resize(const uint32_t width, const uint32_t height)

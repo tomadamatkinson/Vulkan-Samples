@@ -79,7 +79,7 @@ bool TextureCompressionComparison::prepare(const vkb::ApplicationOptions &option
 	create_subpass();
 
 	stats->request_stats({vkb::StatIndex::frame_times, vkb::StatIndex::gpu_ext_read_bytes});
-	gui = std::make_unique<vkb::Gui>(*this, *window, stats.get());
+	// gui = std::make_unique<vkb::Gui>(*this, *window, stats.get());
 
 	return true;
 }
@@ -112,28 +112,28 @@ void TextureCompressionComparison::draw_gui()
 		return in.c_str();
 	});
 
-	gui->show_options_window([this, &name_pointers]() {
-		if (ImGui::Combo("Compressed Format", &current_gui_format, name_pointers.data(), static_cast<int>(name_pointers.size())))
-		{
-			require_redraw     = true;
-			const auto &format = get_texture_formats()[current_gui_format];
-			if (is_texture_format_supported(format))
-			{
-				current_format = current_gui_format;
-			}
-		}
-		const auto &format = get_texture_formats()[current_gui_format];
-		if (is_texture_format_supported(format))
-		{
-			ImGui::Text("Format name: %s", format.format_name);
-			ImGui::Text("Bytes: %f MB", static_cast<float>(current_benchmark.total_bytes) / 1024.f / 1024.f);
-			ImGui::Text("Compression Time: %f (ms)", current_benchmark.compress_time_ms);
-		}
-		else
-		{
-			ImGui::Text("%s not supported on this GPU.", format.short_name);
-		}
-	});
+	// gui->show_options_window([this, &name_pointers]() {
+	// 	if (ImGui::Combo("Compressed Format", &current_gui_format, name_pointers.data(), static_cast<int>(name_pointers.size())))
+	// 	{
+	// 		require_redraw     = true;
+	// 		const auto &format = get_texture_formats()[current_gui_format];
+	// 		if (is_texture_format_supported(format))
+	// 		{
+	// 			current_format = current_gui_format;
+	// 		}
+	// 	}
+	// 	const auto &format = get_texture_formats()[current_gui_format];
+	// 	if (is_texture_format_supported(format))
+	// 	{
+	// 		ImGui::Text("Format name: %s", format.format_name);
+	// 		ImGui::Text("Bytes: %f MB", static_cast<float>(current_benchmark.total_bytes) / 1024.f / 1024.f);
+	// 		ImGui::Text("Compression Time: %f (ms)", current_benchmark.compress_time_ms);
+	// 	}
+	// 	else
+	// 	{
+	// 		ImGui::Text("%s not supported on this GPU.", format.short_name);
+	// 	}
+	// });
 }
 
 const std::vector<TextureCompressionComparison::CompressedTexture_t> &TextureCompressionComparison::get_texture_formats()

@@ -344,30 +344,30 @@ void MeshShaderCulling::render(float delta_time)
 	}
 }
 
-void MeshShaderCulling::on_update_ui_overlay(vkb::Drawer &drawer)
+void MeshShaderCulling::on_update_ui_overlay()
 {
-	if (drawer.header("Use WASD to move the square\n Configurations:\n"))
-	{
-		if (drawer.slider_float("Cull Radius: ", &ubo_cull.cull_radius, 0.5f, 2.0f))
-		{
-			update_uniform_buffers();
-		}
-		if (drawer.combo_box("Meshlet Density Level: ", &density_level, {"4 x 4", "6 x 6", "8 x 8"}))
-		{
-			ubo_cull.meshlet_density = static_cast<float>(density_level);
-			update_uniform_buffers();
-		}
+	// if (drawer.header("Use WASD to move the square\n Configurations:\n"))
+	// {
+	// 	if (drawer.slider_float("Cull Radius: ", &ubo_cull.cull_radius, 0.5f, 2.0f))
+	// 	{
+	// 		update_uniform_buffers();
+	// 	}
+	// 	if (drawer.combo_box("Meshlet Density Level: ", &density_level, {"4 x 4", "6 x 6", "8 x 8"}))
+	// 	{
+	// 		ubo_cull.meshlet_density = static_cast<float>(density_level);
+	// 		update_uniform_buffers();
+	// 	}
 
-		if (get_device().get_gpu().get_features().pipelineStatisticsQuery)
-		{
-			if (drawer.header("Pipeline statistics"))
-			{
-				drawer.text("TS invocations: %d", pipeline_stats[1]);
-				drawer.text("MS invocations: %d", pipeline_stats[2]);
-				drawer.text("FS invocations: %d", pipeline_stats[0]);
-			}
-		}
-	}
+	// 	if (get_device().get_gpu().get_features().pipelineStatisticsQuery)
+	// 	{
+	// 		if (drawer.header("Pipeline statistics"))
+	// 		{
+	// 			drawer.text("TS invocations: %d", pipeline_stats[1]);
+	// 			drawer.text("MS invocations: %d", pipeline_stats[2]);
+	// 			drawer.text("FS invocations: %d", pipeline_stats[0]);
+	// 		}
+	// 	}
+	// }
 }
 
 bool MeshShaderCulling::resize(uint32_t width, uint32_t height)

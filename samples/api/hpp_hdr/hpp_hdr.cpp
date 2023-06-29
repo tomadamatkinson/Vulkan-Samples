@@ -186,28 +186,28 @@ void HPPHDR::build_command_buffers()
 	}
 }
 
-void HPPHDR::on_update_ui_overlay(vkb::HPPDrawer &drawer)
+void HPPHDR::on_update_ui_overlay()
 {
-	if (drawer.header("Settings"))
-	{
-		if (drawer.combo_box("Object type", &models.object_index, object_names))
-		{
-			update_uniform_buffers();
-			build_command_buffers();
-		}
-		if (drawer.input_float("Exposure", &ubo_params.exposure, 0.025f, 3))
-		{
-			update_params();
-		}
-		if (drawer.checkbox("Bloom", &bloom.enabled))
-		{
-			build_command_buffers();
-		}
-		if (drawer.checkbox("Skybox", &display_skybox))
-		{
-			build_command_buffers();
-		}
-	}
+	// if (drawer.header("Settings"))
+	// {
+	// 	if (drawer.combo_box("Object type", &models.object_index, object_names))
+	// 	{
+	// 		update_uniform_buffers();
+	// 		build_command_buffers();
+	// 	}
+	// 	if (drawer.input_float("Exposure", &ubo_params.exposure, 0.025f))
+	// 	{
+	// 		update_params();
+	// 	}
+	// 	if (drawer.checkbox("Bloom", &bloom.enabled))
+	// 	{
+	// 		build_command_buffers();
+	// 	}
+	// 	if (drawer.checkbox("Skybox", &display_skybox))
+	// 	{
+	// 		build_command_buffers();
+	// 	}
+	// }
 }
 
 void HPPHDR::render(float delta_time)

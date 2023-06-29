@@ -19,7 +19,7 @@
 
 #include "common/vk_common.h"
 #include "gltf_loader.h"
-#include "gui.h"
+
 #include "platform/filesystem.h"
 
 #include "scene_graph/components/material.h"
@@ -75,7 +75,7 @@ bool MultithreadingRenderPasses::prepare(const vkb::ApplicationOptions &options)
 
 	// Add a GUI with the stats you want to monitor
 	stats->request_stats({vkb::StatIndex::frame_times, vkb::StatIndex::cpu_cycles});
-	gui = std::make_unique<vkb::Gui>(*this, *window, stats.get());
+	// gui = std::make_unique<vkb::Gui>(*this, *window, stats.get());
 
 	return true;
 }
@@ -152,25 +152,25 @@ void MultithreadingRenderPasses::draw_gui()
 	const bool landscape = reinterpret_cast<vkb::sg::PerspectiveCamera *>(camera)->get_aspect_ratio() > 1.0f;
 	uint32_t   lines     = landscape ? 2 : 4;
 
-	gui->show_options_window(
-	    [this, landscape]() {
-		    ImGui::AlignTextToFramePadding();
-		    ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.4f);
+	// gui->show_options_window(
+	//     [this, landscape]() {
+	// 	    ImGui::AlignTextToFramePadding();
+	// 	    ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.4f);
 
-		    ImGui::Text("Multithreading mode: ");
-		    ImGui::RadioButton("None", &multithreading_mode, static_cast<int>(MultithreadingMode::None));
-		    if (landscape)
-		    {
-			    ImGui::SameLine();
-		    }
-		    ImGui::RadioButton("Primary Buffers", &multithreading_mode, static_cast<int>(MultithreadingMode::PrimaryCommandBuffers));
-		    if (landscape)
-		    {
-			    ImGui::SameLine();
-		    }
-		    ImGui::RadioButton("Secondary Buffers", &multithreading_mode, static_cast<int>(MultithreadingMode::SecondaryCommandBuffers));
-	    },
-	    lines);
+	// 	    ImGui::Text("Multithreading mode: ");
+	// 	    ImGui::RadioButton("None", &multithreading_mode, static_cast<int>(MultithreadingMode::None));
+	// 	    if (landscape)
+	// 	    {
+	// 		    ImGui::SameLine();
+	// 	    }
+	// 	    ImGui::RadioButton("Primary Buffers", &multithreading_mode, static_cast<int>(MultithreadingMode::PrimaryCommandBuffers));
+	// 	    if (landscape)
+	// 	    {
+	// 		    ImGui::SameLine();
+	// 	    }
+	// 	    ImGui::RadioButton("Secondary Buffers", &multithreading_mode, static_cast<int>(MultithreadingMode::SecondaryCommandBuffers));
+	//     },
+	//     lines);
 }
 
 std::vector<vkb::CommandBuffer *> MultithreadingRenderPasses::record_command_buffers(vkb::CommandBuffer &main_command_buffer)
@@ -424,10 +424,10 @@ void MultithreadingRenderPasses::draw_main_pass(vkb::CommandBuffer &command_buff
 		main_render_pipeline->draw(command_buffer, render_target);
 	}
 
-	if (gui)
-	{
-		gui->draw(command_buffer);
-	}
+	// if (gui)
+	// {
+	// 	// gui->draw(command_buffer);
+	// }
 
 	if (!is_secondary_command_buffer)
 	{

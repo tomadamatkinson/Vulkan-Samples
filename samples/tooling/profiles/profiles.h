@@ -81,7 +81,7 @@ class Profiles : public ApiVulkanSample
 	void         view_changed() override;
 	void         create_device() override;
 	void         create_instance() override;
-	virtual void on_update_ui_overlay(vkb::Drawer &drawer) override;
+	virtual void on_update_ui_overlay() override;
 };
 
 std::unique_ptr<vkb::Application> create_profiles();

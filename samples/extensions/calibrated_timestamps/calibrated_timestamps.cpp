@@ -883,39 +883,39 @@ void CalibratedTimestamps::timestamps_end(const std::string &input_tag)
 	LOGE("get_timestamps failed with %d", result)
 }
 
-void CalibratedTimestamps::on_update_ui_overlay(vkb::Drawer &drawer)
+void CalibratedTimestamps::on_update_ui_overlay()
 {
 	// Timestamps period extracted in runtime
-	float timestamp_period = device->get_gpu().get_properties().limits.timestampPeriod;
-	drawer.text("Timestamps Period:\n %.1f Nanoseconds", timestamp_period);
+	// float timestamp_period = device->get_gpu().get_properties().limits.timestampPeriod;
+	// drawer.text("Timestamps Period:\n %.1f Nanoseconds", timestamp_period);
 
-	// Adjustment Handles:
-	if (drawer.header("Settings"))
-	{
-		if (drawer.combo_box("Object type", &models.object_index, object_names))
-		{
-			update_uniform_buffers();
-			build_command_buffers();
-		}
-		if (drawer.checkbox("Bloom", &bloom))
-		{
-			build_command_buffers();
-		}
-		if (drawer.checkbox("Skybox", &display_skybox))
-		{
-			build_command_buffers();
-		}
-	}
+	// // Adjustment Handles:
+	// if (drawer.header("Settings"))
+	// {
+	// 	if (drawer.combo_box("Object type", &models.object_index, object_names))
+	// 	{
+	// 		update_uniform_buffers();
+	// 		build_command_buffers();
+	// 	}
+	// 	if (drawer.checkbox("Bloom", &bloom))
+	// 	{
+	// 		build_command_buffers();
+	// 	}
+	// 	if (drawer.checkbox("Skybox", &display_skybox))
+	// 	{
+	// 		build_command_buffers();
+	// 	}
+	// }
 
-	if (!delta_timestamps.empty())
-	{
-		drawer.text("Time Domain Selected:\n %s", time_domain_to_string(selected_time_domain.timeDomainEXT).c_str());
+	// if (!delta_timestamps.empty())
+	// {
+	// 	drawer.text("Time Domain Selected:\n %s", time_domain_to_string(selected_time_domain.timeDomainEXT).c_str());
 
-		for (const auto &delta_timestamp : delta_timestamps)
-		{
-			drawer.text("%s:\n %.1f Microseconds", delta_timestamp.second.tag.c_str(), static_cast<float>(delta_timestamp.second.delta) * timestamp_period * 0.001f);
-		}
-	}
+	// 	for (const auto &delta_timestamp : delta_timestamps)
+	// 	{
+	// 		drawer.text("%s:\n %.1f Microseconds", delta_timestamp.second.tag.c_str(), static_cast<float>(delta_timestamp.second.delta) * timestamp_period * 0.001f);
+	// 	}
+	// }
 }
 
 bool CalibratedTimestamps::resize(uint32_t width, uint32_t height)

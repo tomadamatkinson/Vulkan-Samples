@@ -19,7 +19,7 @@
 
 #include "common/vk_common.h"
 #include "gltf_loader.h"
-#include "gui.h"
+
 #include "platform/filesystem.h"
 
 #include "rendering/postprocessing_renderpass.h"
@@ -128,7 +128,7 @@ bool MSAASample::prepare(const vkb::ApplicationOptions &options)
 	                      vkb::StatIndex::gpu_ext_read_bytes,
 	                      vkb::StatIndex::gpu_ext_write_bytes});
 
-	gui = std::make_unique<vkb::Gui>(*this, *window, stats.get());
+	// gui = std::make_unique<vkb::Gui>(*this, *window, stats.get());
 
 	return true;
 }
@@ -530,10 +530,10 @@ void MSAASample::draw(vkb::CommandBuffer &command_buffer, vkb::RenderTarget &ren
 	{
 		// If postprocessing is enabled the GUI will be drawn
 		// at the end of the postprocessing renderpass
-		if (gui)
-		{
-			gui->draw(command_buffer);
-		}
+		// if (gui)
+		// {
+		// 	// gui->draw(command_buffer);
+		// }
 	}
 
 	command_buffer.end_render_pass();
@@ -602,10 +602,10 @@ void MSAASample::postprocessing(vkb::CommandBuffer &command_buffer, vkb::RenderT
 	// NOTE: Color and depth attachments are automatically transitioned to be bound as textures
 	postprocessing_pipeline->draw(command_buffer, render_target);
 
-	if (gui)
-	{
-		gui->draw(command_buffer);
-	}
+	// if (gui)
+	// {
+	// 	// gui->draw(command_buffer);
+	// }
 
 	command_buffer.end_render_pass();
 }
@@ -764,84 +764,84 @@ void MSAASample::draw_gui()
 	const bool landscape    = camera->get_aspect_ratio() > 1.0f;
 	uint32_t   lines        = landscape ? 3 : 4;
 
-	gui->show_options_window(
-	    [this, msaa_enabled, landscape]() {
-		    ImGui::AlignTextToFramePadding();
-		    ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.4f);
-		    if (ImGui::BeginCombo("##sample_count", to_string(gui_sample_count).c_str()))
-		    {
-			    for (size_t n = 0; n < supported_sample_count_list.size(); n++)
-			    {
-				    bool is_selected = (gui_sample_count == supported_sample_count_list[n]);
-				    if (ImGui::Selectable(to_string(supported_sample_count_list[n]).c_str(), is_selected))
-				    {
-					    gui_sample_count = supported_sample_count_list[n];
-				    }
-				    if (is_selected)
-				    {
-					    ImGui::SetItemDefaultFocus();
-				    }
-			    }
-			    ImGui::EndCombo();
-		    }
-		    if (landscape)
-		    {
-			    ImGui::SameLine();
-		    }
-		    ImGui::Checkbox("Post-processing (2 renderpasses)", &gui_run_postprocessing);
+	// gui->show_options_window(
+	//     [this, msaa_enabled, landscape]() {
+	// 	    ImGui::AlignTextToFramePadding();
+	// 	    ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.4f);
+	// 	    if (ImGui::BeginCombo("##sample_count", to_string(gui_sample_count).c_str()))
+	// 	    {
+	// 		    for (size_t n = 0; n < supported_sample_count_list.size(); n++)
+	// 		    {
+	// 			    bool is_selected = (gui_sample_count == supported_sample_count_list[n]);
+	// 			    if (ImGui::Selectable(to_string(supported_sample_count_list[n]).c_str(), is_selected))
+	// 			    {
+	// 				    gui_sample_count = supported_sample_count_list[n];
+	// 			    }
+	// 			    if (is_selected)
+	// 			    {
+	// 				    ImGui::SetItemDefaultFocus();
+	// 			    }
+	// 		    }
+	// 		    ImGui::EndCombo();
+	// 	    }
+	// 	    if (landscape)
+	// 	    {
+	// 		    ImGui::SameLine();
+	// 	    }
+	// 	    ImGui::Checkbox("Post-processing (2 renderpasses)", &gui_run_postprocessing);
 
-		    ImGui::Text("Resolve color: ");
-		    ImGui::SameLine();
-		    if (msaa_enabled)
-		    {
-			    ImGui::RadioButton("On writeback", &gui_color_resolve_method, ColorResolve::OnWriteback);
-			    ImGui::SameLine();
-			    ImGui::RadioButton("Separate", &gui_color_resolve_method, ColorResolve::SeparatePass);
-		    }
-		    else
-		    {
-			    ImGui::Text("n/a");
-		    }
+	// 	    ImGui::Text("Resolve color: ");
+	// 	    ImGui::SameLine();
+	// 	    if (msaa_enabled)
+	// 	    {
+	// 		    ImGui::RadioButton("On writeback", &gui_color_resolve_method, ColorResolve::OnWriteback);
+	// 		    ImGui::SameLine();
+	// 		    ImGui::RadioButton("Separate", &gui_color_resolve_method, ColorResolve::SeparatePass);
+	// 	    }
+	// 	    else
+	// 	    {
+	// 		    ImGui::Text("n/a");
+	// 	    }
 
-		    ImGui::Text("Resolve depth: ");
-		    ImGui::SameLine();
-		    if (msaa_enabled && run_postprocessing)
-		    {
-			    if (depth_writeback_resolve_supported)
-			    {
-				    ImGui::Checkbox("##resolve_depth", &gui_resolve_depth_on_writeback);
-				    ImGui::SameLine();
-				    ImGui::Text("On writeback");
-				    ImGui::SameLine();
-				    ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.3f);
-				    if (ImGui::BeginCombo("##resolve_mode", to_string(gui_depth_resolve_mode).c_str()))
-				    {
-					    for (int n = 0; n < supported_depth_resolve_mode_list.size(); n++)
-					    {
-						    bool is_selected = (gui_depth_resolve_mode == supported_depth_resolve_mode_list[n]);
-						    if (ImGui::Selectable(to_string(supported_depth_resolve_mode_list[n]).c_str(), is_selected))
-						    {
-							    gui_depth_resolve_mode = supported_depth_resolve_mode_list[n];
-						    }
-						    if (is_selected)
-						    {
-							    ImGui::SetItemDefaultFocus();
-						    }
-					    }
-					    ImGui::EndCombo();
-				    }
-			    }
-			    else
-			    {
-				    ImGui::Text("Not supported");
-			    }
-		    }
-		    else
-		    {
-			    ImGui::Text("n/a");
-		    }
-	    },
-	    lines);
+	// 	    ImGui::Text("Resolve depth: ");
+	// 	    ImGui::SameLine();
+	// 	    if (msaa_enabled && run_postprocessing)
+	// 	    {
+	// 		    if (depth_writeback_resolve_supported)
+	// 		    {
+	// 			    ImGui::Checkbox("##resolve_depth", &gui_resolve_depth_on_writeback);
+	// 			    ImGui::SameLine();
+	// 			    ImGui::Text("On writeback");
+	// 			    ImGui::SameLine();
+	// 			    ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.3f);
+	// 			    if (ImGui::BeginCombo("##resolve_mode", to_string(gui_depth_resolve_mode).c_str()))
+	// 			    {
+	// 				    for (int n = 0; n < supported_depth_resolve_mode_list.size(); n++)
+	// 				    {
+	// 					    bool is_selected = (gui_depth_resolve_mode == supported_depth_resolve_mode_list[n]);
+	// 					    if (ImGui::Selectable(to_string(supported_depth_resolve_mode_list[n]).c_str(), is_selected))
+	// 					    {
+	// 						    gui_depth_resolve_mode = supported_depth_resolve_mode_list[n];
+	// 					    }
+	// 					    if (is_selected)
+	// 					    {
+	// 						    ImGui::SetItemDefaultFocus();
+	// 					    }
+	// 				    }
+	// 				    ImGui::EndCombo();
+	// 			    }
+	// 		    }
+	// 		    else
+	// 		    {
+	// 			    ImGui::Text("Not supported");
+	// 		    }
+	// 	    }
+	// 	    else
+	// 	    {
+	// 		    ImGui::Text("n/a");
+	// 	    }
+	//     },
+	//     lines);
 }
 
 std::unique_ptr<vkb::VulkanSample> create_msaa()

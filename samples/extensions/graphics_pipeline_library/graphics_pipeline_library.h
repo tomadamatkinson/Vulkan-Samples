@@ -87,7 +87,7 @@ class GraphicsPipelineLibrary : public ApiVulkanSample
 	void         draw();
 	bool         prepare(const vkb::ApplicationOptions &options) override;
 	virtual void render(float delta_time) override;
-	virtual void on_update_ui_overlay(vkb::Drawer &drawer) override;
+	virtual void on_update_ui_overlay() override;
 	virtual bool resize(const uint32_t width, const uint32_t height) override;
 };
 

@@ -122,16 +122,16 @@ void HPPSeparateImageSampler::build_command_buffers()
 	}
 }
 
-void HPPSeparateImageSampler::on_update_ui_overlay(vkb::HPPDrawer &drawer)
+void HPPSeparateImageSampler::on_update_ui_overlay()
 {
-	if (drawer.header("Settings"))
-	{
-		const std::vector<std::string> sampler_names = {"Linear filtering", "Nearest filtering"};
-		if (drawer.combo_box("Sampler", &selected_sampler, sampler_names))
-		{
-			update_uniform_buffers();
-		}
-	}
+	// if (drawer.header("Settings"))
+	// {
+	// 	const std::vector<std::string> sampler_names = {"Linear filtering", "Nearest filtering"};
+	// 	if (drawer.combo_box("Sampler", &selected_sampler, sampler_names))
+	// 	{
+	// 		update_uniform_buffers();
+	// 	}
+	// }
 }
 
 void HPPSeparateImageSampler::render(float delta_time)

@@ -18,7 +18,6 @@
 #pragma once
 
 #include <common/utils.h>
-
 #include <rendering/hpp_render_context.h>
 
 /**
@@ -37,14 +36,6 @@ inline void screenshot(vkb::rendering::HPPRenderContext &render_context, const s
 {
 	vkb::screenshot(reinterpret_cast<vkb::RenderContext &>(render_context), filename);
 }
-
-namespace graphs
-{
-inline bool generate_all(vkb::rendering::HPPRenderContext &context, sg::Scene &scene)
-{
-	return vkb::graphs::generate_all(reinterpret_cast<vkb::RenderContext &>(context), scene);
-}
-}        // namespace graphs
 
 }        // namespace common
 }        // namespace vkb

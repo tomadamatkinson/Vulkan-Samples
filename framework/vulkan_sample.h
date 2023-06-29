@@ -20,7 +20,7 @@
 #include "common/utils.h"
 #include "common/vk_common.h"
 #include "core/instance.h"
-#include "gui.h"
+#include "gui/gui_renderer.hpp"
 #include "platform/application.h"
 #include "rendering/render_context.h"
 #include "rendering/render_pipeline.h"
@@ -188,7 +188,7 @@ class VulkanSample : public Application
 	 */
 	std::unique_ptr<sg::Scene> scene{nullptr};
 
-	std::unique_ptr<Gui> gui{nullptr};
+	std::unique_ptr<VulkanGuiRenderer> gui{nullptr};
 
 	std::unique_ptr<Stats> stats{nullptr};
 
@@ -208,7 +208,8 @@ class VulkanSample : public Application
 	 * @brief Update GUI
 	 * @param delta_time
 	 */
-	void update_gui(float delta_time);
+	void update_gui(float delta_time)
+	{}
 
 	/**
 	 * @brief Prepares the render target and draws to it, calling draw_renderpass

@@ -17,17 +17,21 @@
 
 #include "afbc.h"
 
+#include <gui/gui.hpp>
+#include <gui/widgets/panel.hpp>
+
 #include "common/vk_common.h"
 #include "gltf_loader.h"
-#include "gui.h"
 #include "platform/filesystem.h"
-
 #include "rendering/subpasses/forward_subpass.h"
 #include "stats/stats.h"
 
 #if defined(VK_USE_PLATFORM_ANDROID_KHR)
 #	include "platform/android/android_platform.h"
 #endif
+
+#include <glm/glm.hpp>
+#include <glm/gtx/quaternion.hpp>
 
 #include "scene_graph/components/camera.h"
 #include "scene_graph/components/transform.h"
@@ -68,7 +72,14 @@ bool AFBCSample::prepare(const vkb::ApplicationOptions &options)
 
 	stats->request_stats({vkb::StatIndex::gpu_ext_write_bytes});
 
-	gui = std::make_unique<vkb::Gui>(*this, *window, stats.get());
+	gui = std::make_unique<vkb::VulkanGuiRenderer>(get_render_context());
+	gui->prepare();
+
+	auto panel = vkb::ui<vkb::Panel>("afbc")
+	                 .title("AFBC")
+	                 .done();
+
+	vkb::GUI::add(std::move(panel));
 
 	// Store the start time to calculate rotation
 	start_time = std::chrono::system_clock::now();
@@ -90,7 +101,7 @@ void AFBCSample::update(float delta_time)
 
 	float rotation_factor = std::chrono::duration<float>(std::chrono::system_clock::now() - start_time).count();
 
-	glm::quat qy          = glm::angleAxis(0.003f * sin(rotation_factor * 0.7f), glm::vec3(0.0f, 1.0f, 0.0f));
+	glm::quat qy          = glm::angleAxis(0.003f * (float) sin(rotation_factor * 0.7f), glm::vec3(0.0f, 1.0f, 0.0f));
 	glm::quat orientation = glm::normalize(qy * camera_transform.get_rotation() * glm::angleAxis(0.0f, glm::vec3(1.0f, 0.0f, 0.0f)));
 	camera_transform.set_rotation(orientation);
 
@@ -114,11 +125,11 @@ void AFBCSample::recreate_swapchain()
 
 void AFBCSample::draw_gui()
 {
-	gui->show_options_window(
-	    /* body = */ [this]() {
-		    ImGui::Checkbox("Enable AFBC", &afbc_enabled);
-	    },
-	    /* lines = */ 1);
+	// gui->show_options_window(
+	//     /* body = */ [this]() {
+	// 	    ImGui::Checkbox("Enable AFBC", &afbc_enabled);
+	//     },
+	//     /* lines = */ 1);
 }
 
 std::unique_ptr<vkb::VulkanSample> create_afbc()

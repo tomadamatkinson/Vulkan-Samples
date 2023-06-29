@@ -64,7 +64,7 @@ class MeshShaderCulling : public ApiVulkanSample
 	void draw();
 	bool prepare(const vkb::ApplicationOptions &options) override;
 	void render(float delta_time) override;
-	void on_update_ui_overlay(vkb::Drawer &drawer) override;
+	void on_update_ui_overlay() override;
 	bool resize(uint32_t width, uint32_t height) override;
 	void setup_query_result_buffer();
 	void get_query_results();

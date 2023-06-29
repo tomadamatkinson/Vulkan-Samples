@@ -83,7 +83,7 @@ class DescriptorBufferBasic : public ApiVulkanSample
 	void         draw();
 	bool         prepare(const vkb::ApplicationOptions &options) override;
 	void         render(float delta_time) override;
-	void         on_update_ui_overlay(vkb::Drawer &drawer) override;
+	void         on_update_ui_overlay() override;
 };
 
 std::unique_ptr<vkb::VulkanSample> create_descriptor_buffer_basic();

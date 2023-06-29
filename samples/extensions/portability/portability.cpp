@@ -882,55 +882,55 @@ void Portability::render(float delta_time)
 	}
 }
 
-void Portability::on_update_ui_overlay(vkb::Drawer &drawer)
+void Portability::on_update_ui_overlay()
 {
-#ifdef VK_ENABLE_BETA_EXTENSIONS
-	std::string portability_support_list;
-	if (portability_features.constantAlphaColorBlendFactors)
-		portability_support_list += "constantAlphaColorBlendFactors\n";
-	if (portability_features.events)
-		portability_support_list += "events\n";
-	if (portability_features.imageView2DOn3DImage)
-		portability_support_list += "imageView2DOn3dImage\n";
-	if (portability_features.imageViewFormatReinterpretation)
-		portability_support_list += "imageViewFormatReinterpretation\n";
-	if (portability_features.imageViewFormatSwizzle)
-		portability_support_list += "imageViewFormatSwizzle\n";
-	if (portability_features.multisampleArrayImage)
-		portability_support_list += "multisampleArrayImage\n";
-	if (portability_features.mutableComparisonSamplers)
-		portability_support_list += "mutableComparisonSamplers\n";
-	if (portability_features.pointPolygons)
-		portability_support_list += "pointPolygons\n";
-	if (portability_features.samplerMipLodBias)
-		portability_support_list += "samplerMipLodBias\n";
-	if (portability_features.separateStencilMaskRef)
-		portability_support_list += "separateStencilMaskRef\n";
-	if (portability_features.shaderSampleRateInterpolationFunctions)
-		portability_support_list += "shaderSampleRateInterpolationFunctions\n";
-	if (portability_features.tessellationIsolines)
-		portability_support_list += "tessellationIsolines\n";
-	if (portability_features.tessellationPointMode)
-		portability_support_list += "tessellationPointMode\n";
-	if (portability_features.triangleFans)
-		portability_support_list += "triangleFans\n";
-	if (portability_features.vertexAttributeAccessBeyondStride)
-		portability_support_list += "vertexAttributeAccessBeyondStride\n";
-	drawer.text("Device Portability feature support list:\n%s", portability_support_list.c_str());
-#else
-	drawer.text("VK_ENABLE_BETA_EXTENSIONS not enabled can't list portability feature set");
-#endif
-	if (drawer.header("Settings"))
-	{
-		if (drawer.checkbox("Bloom", &bloom))
-		{
-			build_command_buffers();
-		}
-		if (drawer.checkbox("skysphere", &display_skysphere))
-		{
-			build_command_buffers();
-		}
-	}
+// #ifdef VK_ENABLE_BETA_EXTENSIONS
+// 	std::string portability_support_list;
+// 	if (portability_features.constantAlphaColorBlendFactors)
+// 		portability_support_list += "constantAlphaColorBlendFactors\n";
+// 	if (portability_features.events)
+// 		portability_support_list += "events\n";
+// 	if (portability_features.imageView2DOn3DImage)
+// 		portability_support_list += "imageView2DOn3dImage\n";
+// 	if (portability_features.imageViewFormatReinterpretation)
+// 		portability_support_list += "imageViewFormatReinterpretation\n";
+// 	if (portability_features.imageViewFormatSwizzle)
+// 		portability_support_list += "imageViewFormatSwizzle\n";
+// 	if (portability_features.multisampleArrayImage)
+// 		portability_support_list += "multisampleArrayImage\n";
+// 	if (portability_features.mutableComparisonSamplers)
+// 		portability_support_list += "mutableComparisonSamplers\n";
+// 	if (portability_features.pointPolygons)
+// 		portability_support_list += "pointPolygons\n";
+// 	if (portability_features.samplerMipLodBias)
+// 		portability_support_list += "samplerMipLodBias\n";
+// 	if (portability_features.separateStencilMaskRef)
+// 		portability_support_list += "separateStencilMaskRef\n";
+// 	if (portability_features.shaderSampleRateInterpolationFunctions)
+// 		portability_support_list += "shaderSampleRateInterpolationFunctions\n";
+// 	if (portability_features.tessellationIsolines)
+// 		portability_support_list += "tessellationIsolines\n";
+// 	if (portability_features.tessellationPointMode)
+// 		portability_support_list += "tessellationPointMode\n";
+// 	if (portability_features.triangleFans)
+// 		portability_support_list += "triangleFans\n";
+// 	if (portability_features.vertexAttributeAccessBeyondStride)
+// 		portability_support_list += "vertexAttributeAccessBeyondStride\n";
+// 	drawer.text("Device Portability feature support list:\n%s", portability_support_list.c_str());
+// #else
+// 	drawer.text("VK_ENABLE_BETA_EXTENSIONS not enabled can't list portability feature set");
+// #endif
+// 	if (drawer.header("Settings"))
+// 	{
+// 		if (drawer.checkbox("Bloom", &bloom))
+// 		{
+// 			build_command_buffers();
+// 		}
+// 		if (drawer.checkbox("skysphere", &display_skysphere))
+// 		{
+// 			build_command_buffers();
+// 		}
+// 	}
 }
 
 bool Portability::resize(const uint32_t width, const uint32_t height)

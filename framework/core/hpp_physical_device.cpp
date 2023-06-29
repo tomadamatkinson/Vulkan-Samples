@@ -31,7 +31,7 @@ HPPPhysicalDevice::HPPPhysicalDevice(HPPInstance &instance, vk::PhysicalDevice p
 	properties        = physical_device.getProperties();
 	memory_properties = physical_device.getMemoryProperties();
 
-	LOGI("Found GPU: {}", properties.deviceName);
+	LOGI("Found GPU: {}", properties.deviceName.data());
 
 	queue_family_properties = physical_device.getQueueFamilyProperties();
 }

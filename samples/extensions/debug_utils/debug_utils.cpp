@@ -1096,30 +1096,30 @@ void DebugUtils::render(float delta_time)
 	}
 }
 
-void DebugUtils::on_update_ui_overlay(vkb::Drawer &drawer)
+void DebugUtils::on_update_ui_overlay()
 {
-	if (debug_utils_supported)
-	{
-		drawer.text("Debug utilities enabled");
-	}
-	else
-	{
-		drawer.text("Warning: Debug utilities extension not available");
-		drawer.text("Possible reasons:");
-		drawer.text("- Driver does not support the extension");
-		drawer.text("- Compiling in release mode with no validation layers enabled");
-	}
-	if (drawer.header("Settings"))
-	{
-		if (drawer.checkbox("Bloom", &bloom))
-		{
-			build_command_buffers();
-		}
-		if (drawer.checkbox("skysphere", &display_skysphere))
-		{
-			build_command_buffers();
-		}
-	}
+	// if (debug_utils_supported)
+	// {
+	// 	drawer.text("Debug utilities enabled");
+	// }
+	// else
+	// {
+	// 	drawer.text("Warning: Debug utilities extension not available");
+	// 	drawer.text("Possible reasons:");
+	// 	drawer.text("- Driver does not support the extension");
+	// 	drawer.text("- Compiling in release mode with no validation layers enabled");
+	// }
+	// if (drawer.header("Settings"))
+	// {
+	// 	if (drawer.checkbox("Bloom", &bloom))
+	// 	{
+	// 		build_command_buffers();
+	// 	}
+	// 	if (drawer.checkbox("skysphere", &display_skysphere))
+	// 	{
+	// 		build_command_buffers();
+	// 	}
+	// }
 }
 
 bool DebugUtils::resize(const uint32_t width, const uint32_t height)

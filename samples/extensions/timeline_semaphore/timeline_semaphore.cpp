@@ -81,7 +81,7 @@ void TimelineSemaphore::build_command_buffers()
 {
 }
 
-void TimelineSemaphore::on_update_ui_overlay(vkb::Drawer &)
+void TimelineSemaphore::on_update_ui_overlay()
 {
 }
 

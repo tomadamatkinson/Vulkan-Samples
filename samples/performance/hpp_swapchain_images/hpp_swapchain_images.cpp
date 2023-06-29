@@ -75,15 +75,15 @@ void HPPSwapchainImages::update(float delta_time)
 
 void HPPSwapchainImages::draw_gui()
 {
-	gui->show_options_window(
-	    /* body = */
-	    [this]() {
-		    ImGui::RadioButton("Double buffering", &swapchain_image_count, 2);
-		    ImGui::SameLine();
-		    ImGui::RadioButton("Triple buffering", &swapchain_image_count, 3);
-		    ImGui::SameLine();
-	    },
-	    /* lines = */ 1);
+	// gui->show_options_window(
+	//     /* body = */
+	//     [this]() {
+	// 	    ImGui::RadioButton("Double buffering", &swapchain_image_count, 2);
+	// 	    ImGui::SameLine();
+	// 	    ImGui::RadioButton("Triple buffering", &swapchain_image_count, 3);
+	// 	    ImGui::SameLine();
+	//     },
+	//     /* lines = */ 1);
 }
 
 std::unique_ptr<vkb::Application> create_hpp_swapchain_images()

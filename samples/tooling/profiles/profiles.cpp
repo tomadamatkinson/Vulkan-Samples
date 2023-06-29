@@ -706,9 +706,9 @@ void Profiles::view_changed()
 	update_uniform_buffers();
 }
 
-void Profiles::on_update_ui_overlay(vkb::Drawer &drawer)
+void Profiles::on_update_ui_overlay()
 {
-	drawer.text("Enabled profile: %s", PROFILE_NAME);
+	// drawer.text("Enabled profile: %s", PROFILE_NAME);
 }
 
 std::unique_ptr<vkb::Application> create_profiles()

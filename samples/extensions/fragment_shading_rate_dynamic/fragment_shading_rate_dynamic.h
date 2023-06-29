@@ -36,7 +36,7 @@ class FragmentShadingRateDynamic : public ApiVulkanSample
 	void build_command_buffers() override;
 	void setup_framebuffer() override;
 	void setup_render_pass() override;
-	void on_update_ui_overlay(vkb::Drawer &drawer) override;
+	void on_update_ui_overlay() override;
 
   private:
 	void create_shading_rate_attachment();

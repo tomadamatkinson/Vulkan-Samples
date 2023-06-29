@@ -195,11 +195,11 @@ class ShaderSource
 class ShaderModule
 {
   public:
-	ShaderModule(Device &              device,
+	ShaderModule(Device               &device,
 	             VkShaderStageFlagBits stage,
-	             const ShaderSource &  glsl_source,
-	             const std::string &   entry_point,
-	             const ShaderVariant & shader_variant);
+	             const ShaderSource   &glsl_source,
+	             const std::string    &entry_point,
+	             const ShaderVariant  &shader_variant);
 
 	ShaderModule(const ShaderModule &) = delete;
 
@@ -219,8 +219,6 @@ class ShaderModule
 
 	const std::string &get_info_log() const;
 
-	const std::vector<uint32_t> &get_binary() const;
-
 	inline const std::string &get_debug_name() const
 	{
 		return debug_name;
@@ -237,6 +235,10 @@ class ShaderModule
 	 * @param resource_mode The mode of how the shader resource will be bound
 	 */
 	void set_resource_mode(const std::string &resource_name, const ShaderResourceMode &resource_mode);
+
+	// creates a temporary shader module
+	// should be cleaned up externally
+	VkShaderModule create_module(VkDevice device) const;
 
   private:
 	Device &device;

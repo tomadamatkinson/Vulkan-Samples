@@ -705,18 +705,18 @@ void LogicOpDynamicState::draw_created_model(VkCommandBuffer commandBuffer)
 }
 
 /**
- * @fn void LogicOpDynamicState::on_update_ui_overlay(vkb::Drawer &drawer)
+ * @fn void LogicOpDynamicState::on_update_ui_overlay()
  * @brief Projecting GUI and transferring data between GUI and application
  */
-void LogicOpDynamicState::on_update_ui_overlay(vkb::Drawer &drawer)
+void LogicOpDynamicState::on_update_ui_overlay()
 {
-	if (drawer.header("Settings"))
-	{
-		if (drawer.combo_box("Logic operation", &gui_settings.selected_operation, LogicOpDynamicState::GUI_settings::logic_op_names))
-		{
-			update_uniform_buffers();
-		}
-	}
+	// if (drawer.header("Settings"))
+	// {
+	// 	if (drawer.combo_box("Logic operation", &gui_settings.selected_operation, LogicOpDynamicState::GUI_settings::logic_op_names))
+	// 	{
+	// 		update_uniform_buffers();
+	// 	}
+	// }
 }
 
 std::unique_ptr<vkb::VulkanSample> create_logic_op_dynamic_state()

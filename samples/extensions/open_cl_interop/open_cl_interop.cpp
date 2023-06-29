@@ -18,7 +18,7 @@
 #include "open_cl_interop.h"
 
 #include "common/vk_common.h"
-#include "gui.h"
+
 #include "platform/filesystem.h"
 
 #define CL_FUNCTION_DEFINITIONS

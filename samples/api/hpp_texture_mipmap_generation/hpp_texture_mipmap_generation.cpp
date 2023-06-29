@@ -117,20 +117,20 @@ void HPPTextureMipMapGeneration::build_command_buffers()
 	}
 }
 
-void HPPTextureMipMapGeneration::on_update_ui_overlay(vkb::HPPDrawer &drawer)
+void HPPTextureMipMapGeneration::on_update_ui_overlay()
 {
-	if (drawer.header("Settings"))
-	{
-		drawer.checkbox("Rotate", &rotate_scene);
-		if (drawer.slider_float("LOD bias", &ubo.lod_bias, 0.0f, static_cast<float>(texture.mip_levels)))
-		{
-			update_uniform_buffers();
-		}
-		if (drawer.combo_box("Sampler type", &ubo.sampler_index, sampler_names))
-		{
-			update_uniform_buffers();
-		}
-	}
+	// if (drawer.header("Settings"))
+	// {
+	// 	drawer.checkbox("Rotate", &rotate_scene);
+	// 	if (drawer.slider_float("LOD bias", &ubo.lod_bias, 0.0f, static_cast<float>(texture.mip_levels)))
+	// 	{
+	// 		update_uniform_buffers();
+	// 	}
+	// 	if (drawer.combo_box("Sampler type", &ubo.sampler_index, sampler_names))
+	// 	{
+	// 		update_uniform_buffers();
+	// 	}
+	// }
 }
 
 void HPPTextureMipMapGeneration::render(float delta_time)

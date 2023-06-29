@@ -737,15 +737,15 @@ void TextureLoading::view_changed()
 	update_uniform_buffers();
 }
 
-void TextureLoading::on_update_ui_overlay(vkb::Drawer &drawer)
+void TextureLoading::on_update_ui_overlay()
 {
-	if (drawer.header("Settings"))
-	{
-		if (drawer.slider_float("LOD bias", &ubo_vs.lod_bias, 0.0f, static_cast<float>(texture.mip_levels)))
-		{
-			update_uniform_buffers();
-		}
-	}
+	// if (drawer.header("Settings"))
+	// {
+	// 	if (drawer.slider_float("LOD bias", &ubo_vs.lod_bias, 0.0f, static_cast<float>(texture.mip_levels)))
+	// 	{
+	// 		update_uniform_buffers();
+	// 	}
+	// }
 }
 
 std::unique_ptr<vkb::Application> create_texture_loading()

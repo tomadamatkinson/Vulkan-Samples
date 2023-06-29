@@ -21,7 +21,7 @@
 #include "core/pipeline_layout.h"
 #include "core/shader_module.h"
 #include "gltf_loader.h"
-#include "gui.h"
+
 #include "platform/filesystem.h"
 
 #include "rendering/subpasses/forward_subpass.h"
@@ -69,7 +69,7 @@ bool LayoutTransitions::prepare(const vkb::ApplicationOptions &options)
 	stats->request_stats({vkb::StatIndex::gpu_killed_tiles,
 	                      vkb::StatIndex::gpu_ext_write_bytes});
 
-	gui = std::make_unique<vkb::Gui>(*this, *window, stats.get());
+	// gui = std::make_unique<vkb::Gui>(*this, *window, stats.get());
 
 	return true;
 }
@@ -221,10 +221,10 @@ void LayoutTransitions::draw(vkb::CommandBuffer &command_buffer, vkb::RenderTarg
 
 	lighting_pipeline.draw(command_buffer, get_render_context().get_active_frame().get_render_target());
 
-	if (gui)
-	{
-		gui->draw(command_buffer);
-	}
+	// if (gui)
+	// {
+	// 	// gui->draw(command_buffer);
+	// }
 
 	command_buffer.end_render_pass();
 
@@ -242,15 +242,15 @@ void LayoutTransitions::draw(vkb::CommandBuffer &command_buffer, vkb::RenderTarg
 
 void LayoutTransitions::draw_gui()
 {
-	gui->show_options_window(
-	    /* body = */ [this]() {
-		    ImGui::Text("Transition images from:");
-		    ImGui::RadioButton("Undefined layout", reinterpret_cast<int *>(&layout_transition_type), LayoutTransitionType::UNDEFINED);
-		    ImGui::SameLine();
-		    ImGui::RadioButton("Current layout", reinterpret_cast<int *>(&layout_transition_type), LayoutTransitionType::LAST_LAYOUT);
-		    ImGui::SameLine();
-	    },
-	    /* lines = */ 2);
+	// gui->show_options_window(
+	//     /* body = */ [this]() {
+	// 	    ImGui::Text("Transition images from:");
+	// 	    ImGui::RadioButton("Undefined layout", reinterpret_cast<int *>(&layout_transition_type), LayoutTransitionType::UNDEFINED);
+	// 	    ImGui::SameLine();
+	// 	    ImGui::RadioButton("Current layout", reinterpret_cast<int *>(&layout_transition_type), LayoutTransitionType::LAST_LAYOUT);
+	// 	    ImGui::SameLine();
+	//     },
+	//     /* lines = */ 2);
 }
 
 std::unique_ptr<vkb::VulkanSample> create_layout_transitions()

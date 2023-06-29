@@ -465,7 +465,7 @@ void DynamicRendering::view_changed()
 {
 }
 
-void DynamicRendering::on_update_ui_overlay(vkb::Drawer &drawer)
+void DynamicRendering::on_update_ui_overlay()
 {
 }
 

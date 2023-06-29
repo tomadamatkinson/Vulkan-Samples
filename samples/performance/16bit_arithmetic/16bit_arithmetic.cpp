@@ -55,7 +55,7 @@ bool KHR16BitArithmeticSample::prepare(const vkb::ApplicationOptions &options)
 	// Normally, we should see the immediate effect on frame times,
 	// but if we're somehow hitting 60 FPS, GPU cycles / s should go down while hitting vsync.
 	stats->request_stats({vkb::StatIndex::gpu_cycles, vkb::StatIndex::frame_times});
-	gui = std::make_unique<vkb::Gui>(*this, *window, stats.get());
+	// gui = std::make_unique<vkb::Gui>(*this, *window, stats.get());
 
 	// Set up some structs for the (color, depth) attachments in the default render pass.
 	load_store_infos.resize(2);
@@ -315,7 +315,7 @@ void KHR16BitArithmeticSample::draw_renderpass(vkb::CommandBuffer &command_buffe
 	command_buffer.set_scissor(0, {{{0, 0}, render_target.get_extent()}});
 	subpasses.front()->draw(command_buffer);
 
-	gui->draw(command_buffer);
+	// gui->draw(command_buffer);
 	command_buffer.end_render_pass();
 }
 
@@ -331,18 +331,18 @@ void KHR16BitArithmeticSample::draw_gui()
 		label = "16-bit arithmetic (unsupported features)";
 	}
 
-	gui->show_options_window(
-	    /* body = */ [this, label]() {
-		    if (!supported_extensions)
-		    {
-			    ImGui::Text("%s", label);
-		    }
-		    else
-		    {
-			    ImGui::Checkbox(label, &khr_16bit_arith_enabled);
-		    }
-	    },
-	    /* lines = */ 1);
+	// gui->show_options_window(
+	//     /* body = */ [this, label]() {
+	// 	    if (!supported_extensions)
+	// 	    {
+	// 		    ImGui::Text("%s", label);
+	// 	    }
+	// 	    else
+	// 	    {
+	// 		    ImGui::Checkbox(label, &khr_16bit_arith_enabled);
+	// 	    }
+	//     },
+	//     /* lines = */ 1);
 }
 
 std::unique_ptr<vkb::VulkanSample> create_16bit_arithmetic()

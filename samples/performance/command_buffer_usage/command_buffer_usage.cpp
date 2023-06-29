@@ -24,7 +24,7 @@
 #include "core/pipeline_layout.h"
 #include "core/shader_module.h"
 #include "gltf_loader.h"
-#include "gui.h"
+
 #include "platform/filesystem.h"
 
 #include "stats/stats.h"
@@ -73,7 +73,7 @@ bool CommandBufferUsage::prepare(const vkb::ApplicationOptions &options)
 
 	stats->request_stats({vkb::StatIndex::frame_times, vkb::StatIndex::cpu_cycles});
 
-	gui = std::make_unique<vkb::Gui>(*this, *window, stats.get());
+	// gui = std::make_unique<vkb::Gui>(*this, *window, stats.get());
 
 	// Adjust the maximum number of secondary command buffers
 	// In this sample, only the recording of opaque meshes will be multi-threaded
@@ -144,33 +144,33 @@ void CommandBufferUsage::draw_gui()
 
 	const auto &subpass = static_cast<ForwardSubpassSecondary *>(render_pipeline->get_active_subpass().get());
 
-	gui->show_options_window(
-	    /* body = */ [&]() {
-		    // Secondary command buffer count
-		    ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.55f);
-		    ImGui::SliderInt("", &gui_secondary_cmd_buf_count, 0, max_secondary_command_buffer_count, "Secondary CmdBuffs: %d");
-		    ImGui::SameLine();
-		    ImGui::Text("Draws/buf: %.1f", subpass->get_avg_draws_per_buffer());
+	// gui->show_options_window(
+	//     /* body = */ [&]() {
+	// 	    // Secondary command buffer count
+	// 	    ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.55f);
+	// 	    ImGui::SliderInt("", &gui_secondary_cmd_buf_count, 0, max_secondary_command_buffer_count, "Secondary CmdBuffs: %d");
+	// 	    ImGui::SameLine();
+	// 	    ImGui::Text("Draws/buf: %.1f", subpass->get_avg_draws_per_buffer());
 
-		    // Multi-threading (no effect if 0 secondary command buffers)
-		    ImGui::Checkbox("Multi-threading", &gui_multi_threading);
-		    ImGui::SameLine();
-		    ImGui::Text("(%d threads)", subpass->get_state().thread_count);
+	// 	    // Multi-threading (no effect if 0 secondary command buffers)
+	// 	    ImGui::Checkbox("Multi-threading", &gui_multi_threading);
+	// 	    ImGui::SameLine();
+	// 	    ImGui::Text("(%d threads)", subpass->get_state().thread_count);
 
-		    // Buffer management options
-		    ImGui::RadioButton("Allocate and free", &gui_command_buffer_reset_mode, static_cast<int>(vkb::CommandBuffer::ResetMode::AlwaysAllocate));
-		    if (landscape)
-		    {
-			    ImGui::SameLine();
-		    }
-		    ImGui::RadioButton("Reset buffer", &gui_command_buffer_reset_mode, static_cast<int>(vkb::CommandBuffer::ResetMode::ResetIndividually));
-		    if (landscape)
-		    {
-			    ImGui::SameLine();
-		    }
-		    ImGui::RadioButton("Reset pool", &gui_command_buffer_reset_mode, static_cast<int>(vkb::CommandBuffer::ResetMode::ResetPool));
-	    },
-	    /* lines = */ lines);
+	// 	    // Buffer management options
+	// 	    ImGui::RadioButton("Allocate and free", &gui_command_buffer_reset_mode, static_cast<int>(vkb::CommandBuffer::ResetMode::AlwaysAllocate));
+	// 	    if (landscape)
+	// 	    {
+	// 		    ImGui::SameLine();
+	// 	    }
+	// 	    ImGui::RadioButton("Reset buffer", &gui_command_buffer_reset_mode, static_cast<int>(vkb::CommandBuffer::ResetMode::ResetIndividually));
+	// 	    if (landscape)
+	// 	    {
+	// 		    ImGui::SameLine();
+	// 	    }
+	// 	    ImGui::RadioButton("Reset pool", &gui_command_buffer_reset_mode, static_cast<int>(vkb::CommandBuffer::ResetMode::ResetPool));
+	//     },
+	//     /* lines = */ lines);
 }
 
 void CommandBufferUsage::render(vkb::CommandBuffer &primary_command_buffer)
@@ -211,31 +211,31 @@ void CommandBufferUsage::draw_renderpass(vkb::CommandBuffer &primary_command_buf
 	render(primary_command_buffer);
 
 	// Draw gui
-	if (gui)
-	{
-		if (use_secondary_command_buffers)
-		{
-			const auto &queue = device->get_queue_by_flags(VK_QUEUE_GRAPHICS_BIT, 0);
+	// if (gui)
+	// {
+	// 	if (use_secondary_command_buffers)
+	// 	{
+	// 		const auto &queue = device->get_queue_by_flags(VK_QUEUE_GRAPHICS_BIT, 0);
 
-			auto &secondary_command_buffer = get_render_context().get_active_frame().request_command_buffer(queue, subpass->get_state().command_buffer_reset_mode, VK_COMMAND_BUFFER_LEVEL_SECONDARY);
+	// 		auto &secondary_command_buffer = get_render_context().get_active_frame().request_command_buffer(queue, subpass->get_state().command_buffer_reset_mode, VK_COMMAND_BUFFER_LEVEL_SECONDARY);
 
-			secondary_command_buffer.begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT | VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT, &primary_command_buffer);
+	// 		secondary_command_buffer.begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT | VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT, &primary_command_buffer);
 
-			secondary_command_buffer.set_viewport(0, {viewport});
+	// 		secondary_command_buffer.set_viewport(0, {viewport});
 
-			secondary_command_buffer.set_scissor(0, {scissor});
+	// 		secondary_command_buffer.set_scissor(0, {scissor});
 
-			gui->draw(secondary_command_buffer);
+	// 		// gui->draw(secondary_command_buffer);
 
-			secondary_command_buffer.end();
+	// 		secondary_command_buffer.end();
 
-			primary_command_buffer.execute_commands(secondary_command_buffer);
-		}
-		else
-		{
-			gui->draw(primary_command_buffer);
-		}
-	}
+	// 		primary_command_buffer.execute_commands(secondary_command_buffer);
+	// 	}
+	// 	else
+	// 	{
+	// 		// gui->draw(primary_command_buffer);
+	// 	}
+	// }
 
 	primary_command_buffer.end_render_pass();
 }

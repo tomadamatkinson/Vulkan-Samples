@@ -20,7 +20,6 @@
 
 #include "common/vk_common.h"
 #include "gltf_loader.h"
-#include "gui.h"
 #include "platform/filesystem.h"
 
 #include "rendering/subpasses/forward_subpass.h"
@@ -669,11 +668,11 @@ void OpenGLInterop::view_changed()
 	update_uniform_buffers();
 }
 
-void OpenGLInterop::on_update_ui_overlay(vkb::Drawer &drawer)
+void OpenGLInterop::on_update_ui_overlay()
 {
-	if (drawer.header("Settings"))
-	{
-	}
+	// if (drawer.header("Settings"))
+	// {
+	// }
 }
 
 void OpenGLInterop::build_command_buffers()

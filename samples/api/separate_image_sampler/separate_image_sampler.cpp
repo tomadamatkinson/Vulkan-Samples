@@ -476,17 +476,17 @@ void SeparateImageSampler::view_changed()
 	update_uniform_buffers();
 }
 
-void SeparateImageSampler::on_update_ui_overlay(vkb::Drawer &drawer)
+void SeparateImageSampler::on_update_ui_overlay()
 {
-	if (drawer.header("Settings"))
-	{
-		const std::vector<std::string> sampler_names = {"Linear filtering",
-		                                                "Nearest filtering"};
-		if (drawer.combo_box("Sampler", &selected_sampler, sampler_names))
-		{
-			update_uniform_buffers();
-		}
-	}
+	// if (drawer.header("Settings"))
+	// {
+	// 	const std::vector<std::string> sampler_names = {"Linear filtering",
+	// 	                                                "Nearest filtering"};
+	// 	if (drawer.combo_box("Sampler", &selected_sampler, sampler_names))
+	// 	{
+	// 		update_uniform_buffers();
+	// 	}
+	// }
 }
 
 std::unique_ptr<vkb::Application> create_separate_image_sampler()

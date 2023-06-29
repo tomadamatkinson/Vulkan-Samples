@@ -55,7 +55,7 @@ void BufferDeviceAddress::build_command_buffers()
 {
 }
 
-void BufferDeviceAddress::on_update_ui_overlay(vkb::Drawer &)
+void BufferDeviceAddress::on_update_ui_overlay()
 {
 }
 

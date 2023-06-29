@@ -54,7 +54,7 @@ class OpenGLInterop : public ApiVulkanSample
 	void render(float delta_time) override;
 	void build_command_buffers() override;
 	void view_changed() override;
-	void on_update_ui_overlay(vkb::Drawer &drawer) override;
+	void on_update_ui_overlay() override;
 
   private:
 	void prepare_shared_resources();

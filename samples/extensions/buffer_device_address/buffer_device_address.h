@@ -31,7 +31,7 @@ class BufferDeviceAddress : public ApiVulkanSample
 	virtual void request_gpu_features(vkb::PhysicalDevice &gpu) override;
 	virtual void render(float delta_time) override;
 	virtual void build_command_buffers() override;
-	virtual void on_update_ui_overlay(vkb::Drawer &drawer) override;
+	virtual void on_update_ui_overlay() override;
 	virtual bool prepare(const vkb::ApplicationOptions &options) override;
 
 	void             create_pipelines();

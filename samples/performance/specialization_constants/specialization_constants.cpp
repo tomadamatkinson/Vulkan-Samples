@@ -21,7 +21,7 @@
 #include <vector>
 
 #include "gltf_loader.h"
-#include "gui.h"
+
 #include "platform/filesystem.h"
 
 #include "stats/stats.h"
@@ -57,7 +57,7 @@ bool SpecializationConstants::prepare(const vkb::ApplicationOptions &options)
 
 	stats->request_stats({vkb::StatIndex::gpu_fragment_cycles});
 
-	gui = std::make_unique<vkb::Gui>(*this, *window, stats.get());
+	// gui = std::make_unique<vkb::Gui>(*this, *window, stats.get());
 
 	return true;
 }
@@ -148,16 +148,16 @@ void SpecializationConstants::draw_gui()
 	bool     landscape = camera->get_aspect_ratio() > 1.0f;
 	uint32_t lines     = landscape ? 1 : 2;
 
-	gui->show_options_window(
-	    /* body = */ [&]() {
-		    ImGui::RadioButton("Uniform Buffer Objects", &specialization_constants_enabled, 0);
-		    if (landscape)
-		    {
-			    ImGui::SameLine();
-		    }
-		    ImGui::RadioButton("Specialization Constants", &specialization_constants_enabled, 1);
-	    },
-	    /* lines = */ lines);
+	// gui->show_options_window(
+	//     /* body = */ [&]() {
+	// 	    ImGui::RadioButton("Uniform Buffer Objects", &specialization_constants_enabled, 0);
+	// 	    if (landscape)
+	// 	    {
+	// 		    ImGui::SameLine();
+	// 	    }
+	// 	    ImGui::RadioButton("Specialization Constants", &specialization_constants_enabled, 1);
+	//     },
+	//     /* lines = */ lines);
 }
 
 std::unique_ptr<vkb::VulkanSample> create_specialization_constants()

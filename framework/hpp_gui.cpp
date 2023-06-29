@@ -317,7 +317,7 @@ void HPPGui::update(const float delta_time)
 {
 	if (visible != prev_visible)
 	{
-		drawer.set_dirty(true);
+		// drawer.set_dirty(true);
 		prev_visible = visible;
 	}
 
@@ -660,11 +660,6 @@ const HPPGui::StatsView &HPPGui::get_stats_view() const
 	return stats_view;
 }
 
-HPPDrawer &HPPGui::get_drawer()
-{
-	return drawer;
-}
-
 HPPFont const &HPPGui::get_font(const std::string &font_name) const
 {
 	assert(!fonts.empty() && "No fonts exist");
@@ -721,11 +716,11 @@ void HPPGui::show_top_window(const std::string &app_name, const vkb::stats::HPPS
 	// Transparent background
 	ImGui::SetNextWindowBgAlpha(overlay_alpha);
 	ImVec2 size{ImGui::GetIO().DisplaySize.x, 0.0f};
-	ImGui::SetNextWindowSize(size, ImGuiSetCond_Always);
+	ImGui::SetNextWindowSize(size, ImGuiCond_Always);
 
 	// Top left
 	ImVec2 pos{0.0f, 0.0f};
-	ImGui::SetNextWindowPos(pos, ImGuiSetCond_Always);
+	ImGui::SetNextWindowPos(pos, ImGuiCond_Always);
 
 	bool is_open = true;
 	ImGui::Begin("Top", &is_open, common_flags);
@@ -779,7 +774,7 @@ void HPPGui::show_debug_window(const DebugInfo &debug_info, const ImVec2 &positi
 	}
 
 	ImGui::SetNextWindowBgAlpha(overlay_alpha);
-	ImGui::SetNextWindowPos(position, ImGuiSetCond_FirstUseEver);
+	ImGui::SetNextWindowPos(position, ImGuiCond_FirstUseEver);
 	ImGui::SetNextWindowContentSize(ImVec2{io.DisplaySize.x, 0.0f});
 
 	bool                   is_open = true;
@@ -810,46 +805,6 @@ void HPPGui::show_debug_window(const DebugInfo &debug_info, const ImVec2 &positi
 	}
 	ImGui::Columns(1);
 	ImGui::EndChild();
-
-	static Timer       timer;
-	static const char *message;
-
-	if (sample.has_scene())
-	{
-		if (ImGui::Button("Save Debug Graphs"))
-		{
-			if (vkb::common::graphs::generate_all(sample.get_render_context(), sample.get_scene()))
-			{
-				message = "Graphs Saved!";
-			}
-			else
-			{
-				message = "Error outputting graphs!";
-			}
-
-			if (timer.is_running())
-			{
-				timer.lap();
-			}
-			else
-			{
-				timer.start();
-			}
-		}
-	}
-
-	if (timer.is_running())
-	{
-		if (timer.elapsed() > 2.0)
-		{
-			timer.stop();
-		}
-		else
-		{
-			ImGui::SameLine();
-			ImGui::Text("%s", message);
-		}
-	}
 
 	ImGui::PopFont();
 	ImGui::End();
@@ -915,7 +870,7 @@ void HPPGui::show_options_window(std::function<void()> body, const uint32_t line
 	const ImVec2 size = ImVec2(window_width, 0);
 	ImGui::SetNextWindowSize(size, ImGuiCond_Always);
 	const ImVec2 pos = ImVec2(0.0f, ImGui::GetIO().DisplaySize.y - window_height);
-	ImGui::SetNextWindowPos(pos, ImGuiSetCond_Always);
+	ImGui::SetNextWindowPos(pos, ImGuiCond_Always);
 	const ImGuiWindowFlags flags   = (ImGuiWindowFlags_NoMove |
                                     ImGuiWindowFlags_NoScrollbar |
                                     ImGuiWindowFlags_NoTitleBar |
@@ -938,7 +893,7 @@ void HPPGui::show_simple_window(const std::string &name, uint32_t last_fps, std:
 	ImGui::NewFrame();
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0);
 	ImGui::SetNextWindowPos(ImVec2(10, 10));
-	ImGui::SetNextWindowSize(ImVec2(0, 0), ImGuiSetCond_FirstUseEver);
+	ImGui::SetNextWindowSize(ImVec2(0, 0), ImGuiCond_FirstUseEver);
 	ImGui::Begin("Vulkan Example", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove);
 	ImGui::TextUnformatted(name.c_str());
 	ImGui::TextUnformatted(sample.get_render_context().get_device().get_gpu().get_properties().deviceName.data());
@@ -1061,116 +1016,4 @@ bool HPPGui::input_event(const InputEvent &input_event)
 
 	return capture_move_event;
 }
-
-void HPPDrawer::clear()
-{
-	dirty = false;
-}
-
-bool HPPDrawer::is_dirty() const
-{
-	return dirty;
-}
-
-void HPPDrawer::set_dirty(bool dirty)
-{
-	this->dirty = dirty;
-}
-
-bool HPPDrawer::header(const std::string &caption) const
-{
-	return ImGui::CollapsingHeader(caption.c_str(), ImGuiTreeNodeFlags_DefaultOpen);
-}
-
-bool HPPDrawer::checkbox(const std::string &caption, bool *value)
-{
-	bool res = ImGui::Checkbox(caption.c_str(), value);
-	if (res)
-	{
-		dirty = true;
-	};
-	return res;
-}
-
-bool HPPDrawer::checkbox(const std::string &caption, int32_t *value)
-{
-	bool val = (*value == 1);
-	bool res = ImGui::Checkbox(caption.c_str(), &val);
-	*value   = val;
-	if (res)
-	{
-		dirty = true;
-	};
-	return res;
-}
-
-bool HPPDrawer::input_float(const std::string &caption, float *value, float step, uint32_t precision)
-{
-	bool res = ImGui::InputFloat(caption.c_str(), value, step, step * 10.0f, precision);
-	if (res)
-	{
-		dirty = true;
-	};
-	return res;
-}
-
-bool HPPDrawer::slider_float(const std::string &caption, float *value, float min, float max)
-{
-	bool res = ImGui::SliderFloat(caption.c_str(), value, min, max);
-	if (res)
-	{
-		dirty = true;
-	};
-	return res;
-}
-
-bool HPPDrawer::slider_int(const std::string &caption, int32_t *value, int32_t min, int32_t max)
-{
-	bool res = ImGui::SliderInt(caption.c_str(), value, min, max);
-	if (res)
-	{
-		dirty = true;
-	};
-	return res;
-}
-
-bool HPPDrawer::combo_box(const std::string &caption, int32_t *itemindex, std::vector<std::string> items)
-{
-	if (items.empty())
-	{
-		return false;
-	}
-	std::vector<const char *> charitems;
-	charitems.reserve(items.size());
-	for (size_t i = 0; i < items.size(); i++)
-	{
-		charitems.push_back(items[i].c_str());
-	}
-	uint32_t itemCount = static_cast<uint32_t>(charitems.size());
-	bool     res       = ImGui::Combo(caption.c_str(), itemindex, &charitems[0], itemCount, itemCount);
-	if (res)
-	{
-		dirty = true;
-	};
-	return res;
-}
-
-bool HPPDrawer::button(const std::string &caption)
-{
-	bool res = ImGui::Button(caption.c_str());
-	if (res)
-	{
-		dirty = true;
-	};
-	return res;
-}
-
-void HPPDrawer::text(const char *formatstr, ...)
-{
-	va_list args;
-	va_start(args, formatstr);
-	ImGui::TextV(formatstr, args);
-	va_end(args);
-}
-
 }        // namespace vkb

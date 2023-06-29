@@ -186,7 +186,7 @@ class HPPHDR : public HPPApiVulkanSample
 
 	// from HPPApiVulkanSample
 	virtual void build_command_buffers() override;
-	virtual void on_update_ui_overlay(vkb::HPPDrawer &drawer) override;
+	virtual void on_update_ui_overlay() override;
 	virtual void render(float delta_time) override;
 
 	vk::DeviceMemory      allocate_memory(vk::Image image);

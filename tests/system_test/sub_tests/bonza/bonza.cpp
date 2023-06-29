@@ -18,7 +18,6 @@
 #include "bonza.h"
 
 #include "gltf_loader.h"
-#include "gui.h"
 #include "platform/platform.h"
 #include "stats/stats.h"
 #if defined(VK_USE_PLATFORM_ANDROID_KHR)

@@ -28,7 +28,7 @@ VKBP_ENABLE_WARNINGS()
 #include "core/pipeline_layout.h"
 #include "core/shader_module.h"
 #include "gltf_loader.h"
-#include "gui.h"
+
 #include "platform/filesystem.h"
 
 #include "rendering/subpasses/forward_subpass.h"
@@ -73,7 +73,7 @@ bool SurfaceRotation::prepare(const vkb::ApplicationOptions &options)
 
 	set_render_pipeline(std::move(render_pipeline));
 
-	gui = std::make_unique<vkb::Gui>(*this, *window, stats.get());
+	// gui = std::make_unique<vkb::Gui>(*this, *window, stats.get());
 
 	return true;
 }
@@ -135,24 +135,24 @@ void SurfaceRotation::draw_gui()
 	{
 		// GUI landscape layout
 		uint32_t lines = 2;
-		gui->show_options_window(
-		    /* body = */ [&]() {
-			    ImGui::Checkbox(prerotate_str.c_str(), &pre_rotate);
-			    ImGui::Text("%s | %s", transform.c_str(), resolution_str.c_str());
-		    },
-		    /* lines = */ lines);
+		// gui->show_options_window(
+		//     /* body = */ [&]() {
+		// 	    ImGui::Checkbox(prerotate_str.c_str(), &pre_rotate);
+		// 	    ImGui::Text("%s | %s", transform.c_str(), resolution_str.c_str());
+		//     },
+		//     /* lines = */ lines);
 	}
 	else
 	{
 		// GUI portrait layout
-		uint32_t lines = 3;
-		gui->show_options_window(
-		    /* body = */ [&]() {
-			    ImGui::Checkbox(prerotate_str.c_str(), &pre_rotate);
-			    ImGui::Text("%s", transform.c_str());
-			    ImGui::Text("%s", resolution_str.c_str());
-		    },
-		    /* lines = */ lines);
+		// uint32_t lines = 3;
+		// gui->show_options_window(
+		//     /* body = */ [&]() {
+		// 	    ImGui::Checkbox(prerotate_str.c_str(), &pre_rotate);
+		// 	    ImGui::Text("%s", transform.c_str());
+		// 	    ImGui::Text("%s", resolution_str.c_str());
+		//     },
+		//     /* lines = */ lines);
 	}
 }
 
@@ -208,10 +208,10 @@ void SurfaceRotation::recreate_swapchain()
 
 	get_render_context().update_swapchain(surface_extent, select_pre_transform());
 
-	if (gui)
-	{
-		gui->resize(surface_extent.width, surface_extent.height);
-	}
+	// if (gui)
+	// {
+	// 	gui->resize(surface_extent.width, surface_extent.height);
+	// }
 }
 
 std::unique_ptr<vkb::VulkanSample> create_surface_rotation()

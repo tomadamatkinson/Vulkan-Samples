@@ -408,21 +408,21 @@ bool GshaderToMshader::resize(const uint32_t width, const uint32_t height)
 	return true;
 }
 
-void GshaderToMshader::on_update_ui_overlay(vkb::Drawer &drawer)
+void GshaderToMshader::on_update_ui_overlay()
 {
-	if (drawer.header("Settings"))
-	{
-		if (drawer.checkbox("Display normals - gshader", &showNormalsGeo))
-		{
-			showNormalsMesh = false;
-			build_command_buffers();
-		}
-		if (drawer.checkbox("Display normals - mshader", &showNormalsMesh))
-		{
-			showNormalsGeo = false;
-			build_command_buffers();
-		}
-	}
+	// if (drawer.header("Settings"))
+	// {
+	// 	if (drawer.checkbox("Display normals - gshader", &showNormalsGeo))
+	// 	{
+	// 		showNormalsMesh = false;
+	// 		build_command_buffers();
+	// 	}
+	// 	if (drawer.checkbox("Display normals - mshader", &showNormalsMesh))
+	// 	{
+	// 		showNormalsGeo = false;
+	// 		build_command_buffers();
+	// 	}
+	// }
 }
 
 void GshaderToMshader::request_gpu_features(vkb::PhysicalDevice &gpu)

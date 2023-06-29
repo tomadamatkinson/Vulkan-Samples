@@ -193,52 +193,52 @@ void MultiDrawIndirect::build_command_buffers()
 	}
 }
 
-void MultiDrawIndirect::on_update_ui_overlay(vkb::Drawer &drawer)
+void MultiDrawIndirect::on_update_ui_overlay()
 {
-	if (drawer.header("GPU Rendering"))
-	{
-		static const std::array<const char *, 2> supported = {"Not supported", "Supported"};
-		drawer.text("Multi-Draw Indirect: %s", supported[this->m_supports_mdi]);
-		drawer.text("drawIndirectFirstInstance: %s", supported[this->m_supports_first_instance]);
-		drawer.text("Device buffer address: %s", supported[this->m_supports_buffer_device]);
+	// if (drawer.header("GPU Rendering"))
+	// {
+	// 	static const std::array<const char *, 2> supported = {"Not supported", "Supported"};
+	// 	drawer.text("Multi-Draw Indirect: %s", supported[this->m_supports_mdi]);
+	// 	drawer.text("drawIndirectFirstInstance: %s", supported[this->m_supports_first_instance]);
+	// 	drawer.text("Device buffer address: %s", supported[this->m_supports_buffer_device]);
 
-		drawer.text("");
-		uint32_t instance_count = 0;
+	// 	drawer.text("");
+	// 	uint32_t instance_count = 0;
 
-		if (render_mode == RenderMode::GPU || render_mode == RenderMode::GPU_DEVICE_ADDRESS)
-		{
-			// copy over the GPU-culled data to the CPU command so that we can count the number of instances
-			assert(!!indirect_call_buffer && !!cpu_staging_buffer && indirect_call_buffer->get_size() == cpu_staging_buffer->get_size());
-			assert(cpu_commands.size() * sizeof(cpu_commands[0]) == cpu_staging_buffer->get_size());
+	// 	if (render_mode == RenderMode::GPU || render_mode == RenderMode::GPU_DEVICE_ADDRESS)
+	// 	{
+	// 		// copy over the GPU-culled data to the CPU command so that we can count the number of instances
+	// 		assert(!!indirect_call_buffer && !!cpu_staging_buffer && indirect_call_buffer->get_size() == cpu_staging_buffer->get_size());
+	// 		assert(cpu_commands.size() * sizeof(cpu_commands[0]) == cpu_staging_buffer->get_size());
 
-			auto &cmd = device->request_command_buffer();
-			cmd.begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
-			cmd.copy_buffer(*indirect_call_buffer, *cpu_staging_buffer, cpu_staging_buffer->get_size());
-			cmd.end();
+	// 		auto &cmd = device->request_command_buffer();
+	// 		cmd.begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
+	// 		cmd.copy_buffer(*indirect_call_buffer, *cpu_staging_buffer, cpu_staging_buffer->get_size());
+	// 		cmd.end();
 
-			auto &queue = device->get_queue_by_flags(VK_QUEUE_COMPUTE_BIT, 0);
-			queue.submit(cmd, device->request_fence());
-			device->get_fence_pool().wait();
+	// 		auto &queue = device->get_queue_by_flags(VK_QUEUE_COMPUTE_BIT, 0);
+	// 		queue.submit(cmd, device->request_fence());
+	// 		device->get_fence_pool().wait();
 
-			memcpy(cpu_commands.data(), cpu_staging_buffer->get_data(), cpu_staging_buffer->get_size());
-		}
+	// 		memcpy(cpu_commands.data(), cpu_staging_buffer->get_data(), cpu_staging_buffer->get_size());
+	// 	}
 
-		for (auto &&cmd : cpu_commands)
-		{
-			instance_count += cmd.instanceCount;
-		}
-		drawer.text("Instances: %d / %d", instance_count, 256);
+	// 	for (auto &&cmd : cpu_commands)
+	// 	{
+	// 		instance_count += cmd.instanceCount;
+	// 	}
+	// 	drawer.text("Instances: %d / %d", instance_count, 256);
 
-		m_requires_rebuild |= drawer.checkbox("Enable multi-draw", &m_enable_mdi);
-		drawer.checkbox("Freeze culling", &m_freeze_cull);
+	// 	m_requires_rebuild |= drawer.checkbox("Enable multi-draw", &m_enable_mdi);
+	// 	drawer.checkbox("Freeze culling", &m_freeze_cull);
 
-		int32_t render_selection = render_mode;
-		if (drawer.combo_box("Cull mode", &render_selection, {"CPU", "GPU", "GPU Device Address"}))
-		{
-			m_requires_rebuild = true;
-			render_mode        = static_cast<RenderMode>(render_selection);
-		}
-	}
+	// 	int32_t render_selection = render_mode;
+	// 	if (drawer.combo_box("Cull mode", &render_selection, {"CPU", "GPU", "GPU Device Address"}))
+	// 	{
+	// 		m_requires_rebuild = true;
+	// 		render_mode        = static_cast<RenderMode>(render_selection);
+	// 	}
+	// }
 }
 
 void MultiDrawIndirect::create_sampler()

@@ -76,30 +76,30 @@ Where all memory properties were converted and displayed in proper units (e.g.,`
 Where:
 
 ````cpp
-void MemoryBudget::on_update_ui_overlay(vkb::Drawer &drawer)
+void MemoryBudget::on_update_ui_overlay()
 {
-	converted_memory = update_converted_memory(device_memory_total_usage);
-	drawer.text("Total Memory Usage: %.2f %s", converted_memory.data, converted_memory.units.c_str());
-	converted_memory = update_converted_memory(device_memory_total_budget);
-	drawer.text("Total Memory Budget: %.2f %s", converted_memory.data, converted_memory.units.c_str());
+	// converted_memory = update_converted_memory(device_memory_total_usage);
+	// drawer.text("Total Memory Usage: %.2f %s", converted_memory.data, converted_memory.units.c_str());
+	// converted_memory = update_converted_memory(device_memory_total_budget);
+	// drawer.text("Total Memory Budget: %.2f %s", converted_memory.data, converted_memory.units.c_str());
 
-	if (drawer.header("Memory Heap Details"))
-	{
-		for (int i = 0; i < static_cast<int>(device_memory_heap_count); i++)
-		{
-			std::string header = "Memory Heap Index: " + std::to_string(i);
-			if (drawer.header(header.c_str()))
-			{
-				converted_memory = update_converted_memory(physical_device_memory_budget_properties.heapUsage[i]);
-				drawer.text("Usage: %.2f %s", converted_memory.data, converted_memory.units.c_str());
+	// if (drawer.header("Memory Heap Details"))
+	// {
+	// 	for (int i = 0; i < static_cast<int>(device_memory_heap_count); i++)
+	// 	{
+	// 		std::string header = "Memory Heap Index: " + std::to_string(i);
+	// 		if (drawer.header(header.c_str()))
+	// 		{
+	// 			converted_memory = update_converted_memory(physical_device_memory_budget_properties.heapUsage[i]);
+	// 			drawer.text("Usage: %.2f %s", converted_memory.data, converted_memory.units.c_str());
 
-				converted_memory = update_converted_memory(physical_device_memory_budget_properties.heapBudget[i]);
-				drawer.text("Budget: %.2f %s", converted_memory.data, converted_memory.units.c_str());
+	// 			converted_memory = update_converted_memory(physical_device_memory_budget_properties.heapBudget[i]);
+	// 			drawer.text("Budget: %.2f %s", converted_memory.data, converted_memory.units.c_str());
 
-				drawer.text("Heap Flag: %s", read_memoryHeap_flags(device_memory_properties.memoryProperties.memoryHeaps[i].flags).c_str());
-			}
-		}
-	}
+	// 			drawer.text("Heap Flag: %s", read_memoryHeap_flags(device_memory_properties.memoryProperties.memoryHeaps[i].flags).c_str());
+	// 		}
+	// 	}
+	// }
 }
 ````
 

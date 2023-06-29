@@ -72,7 +72,7 @@ class FragmentShaderBarycentric : public ApiVulkanSample
 	void render(float delta_time) override;
 	void build_command_buffers() override;
 	void request_gpu_features(vkb::PhysicalDevice &gpu) override;
-	void on_update_ui_overlay(vkb::Drawer &drawer) override;
+	void on_update_ui_overlay() override;
 
   private:
 	void load_assets();

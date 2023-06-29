@@ -21,7 +21,7 @@
 #include "core/pipeline_layout.h"
 #include "core/shader_module.h"
 #include "gltf_loader.h"
-#include "gui.h"
+
 #include "platform/filesystem.h"
 
 #include "rendering/subpasses/forward_subpass.h"
@@ -59,7 +59,7 @@ bool SwapchainImages::prepare(const vkb::ApplicationOptions &options)
 	set_render_pipeline(std::move(render_pipeline));
 
 	stats->request_stats({vkb::StatIndex::frame_times});
-	gui = std::make_unique<vkb::Gui>(*this, *window, stats.get());
+	// gui = std::make_unique<vkb::Gui>(*this, *window, stats.get());
 
 	return true;
 }
@@ -82,14 +82,14 @@ void SwapchainImages::update(float delta_time)
 
 void SwapchainImages::draw_gui()
 {
-	gui->show_options_window(
-	    /* body = */ [this]() {
-		    ImGui::RadioButton("Double buffering", &swapchain_image_count, 2);
-		    ImGui::SameLine();
-		    ImGui::RadioButton("Triple buffering", &swapchain_image_count, 3);
-		    ImGui::SameLine();
-	    },
-	    /* lines = */ 1);
+	// gui->show_options_window(
+	//     /* body = */ [this]() {
+	// 	    ImGui::RadioButton("Double buffering", &swapchain_image_count, 2);
+	// 	    ImGui::SameLine();
+	// 	    ImGui::RadioButton("Triple buffering", &swapchain_image_count, 3);
+	// 	    ImGui::SameLine();
+	//     },
+	//     /* lines = */ 1);
 }
 
 std::unique_ptr<vkb::VulkanSample> create_swapchain_images()

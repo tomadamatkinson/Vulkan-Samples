@@ -186,7 +186,7 @@ bool KHR16BitStorageInputOutputSample::prepare(const vkb::ApplicationOptions &op
 
 	stats->request_stats({vkb::StatIndex::gpu_ext_read_bytes, vkb::StatIndex::gpu_ext_write_bytes});
 
-	gui = std::make_unique<vkb::Gui>(*this, *window, stats.get());
+	// gui = std::make_unique<vkb::Gui>(*this, *window, stats.get());
 
 	return true;
 }
@@ -229,11 +229,11 @@ void KHR16BitStorageInputOutputSample::draw_gui()
 		label = "Enable 16-bit InputOutput (noop - unsupported by device)";
 	}
 
-	gui->show_options_window(
-	    /* body = */ [this, label]() {
-		    ImGui::Checkbox(label, &khr_16bit_storage_input_output_enabled);
-	    },
-	    /* lines = */ 1);
+	// gui->show_options_window(
+	//     /* body = */ [this, label]() {
+	// 	    ImGui::Checkbox(label, &khr_16bit_storage_input_output_enabled);
+	//     },
+	//     /* lines = */ 1);
 }
 
 void KHR16BitStorageInputOutputSample::recreate_swapchain()

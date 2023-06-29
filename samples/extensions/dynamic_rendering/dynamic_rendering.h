@@ -31,7 +31,7 @@ class DynamicRendering : public ApiVulkanSample
 	void render(float delta_time) override;
 	void build_command_buffers() override;
 	void view_changed() override;
-	void on_update_ui_overlay(vkb::Drawer &drawer) override;
+	void on_update_ui_overlay() override;
 	void request_gpu_features(vkb::PhysicalDevice &gpu) override;
 
   private:

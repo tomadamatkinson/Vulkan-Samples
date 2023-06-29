@@ -15,11 +15,10 @@
  * limitations under the License.
  */
 
-#include <hpp_vulkan_sample.h>
-
 #include <common/hpp_utils.h>
 #include <hpp_gltf_loader.h>
 #include <hpp_gui.h>
+#include <hpp_vulkan_sample.h>
 #include <rendering/hpp_render_context.h>
 #include <scene_graph/components/camera.h>
 #include <scene_graph/scripts/animation.h>
@@ -260,7 +259,7 @@ void HPPVulkanSample::update_gui(float delta_time)
 
 		gui->new_frame();
 
-		gui->show_top_window(get_name(), stats.get(), &get_debug_info());
+		// gui->show_top_window(get_name(), stats.get(), &get_debug_info());
 
 		// Samples can override this
 		draw_gui();
@@ -422,14 +421,6 @@ void HPPVulkanSample::input_event(const InputEvent &input_event)
 		    (key_event.get_code() == KeyCode::PrintScreen || key_event.get_code() == KeyCode::F12))
 		{
 			vkb::common::screenshot(*render_context, "screenshot-" + get_name());
-		}
-
-		if (key_event.get_code() == KeyCode::F6 && key_event.get_action() == KeyAction::Down)
-		{
-			if (!vkb::common::graphs::generate_all(get_render_context(), *scene))
-			{
-				LOGE("Failed to save Graphs");
-			}
 		}
 	}
 }

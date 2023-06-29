@@ -19,7 +19,6 @@
 
 #include <algorithm>
 
-#include "gui.h"
 #include "hpp_gui.h"
 
 namespace plugins
@@ -40,7 +39,7 @@ void UserInterfaceOptions::init(const vkb::CommandParser &parser)
 {
 	if (parser.contains(&hide_ui_flag))
 	{
-		vkb::Gui::visible    = false;
+		// vkb::Gui::visible    = false;
 		vkb::HPPGui::visible = false;
 	}
 }

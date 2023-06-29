@@ -22,7 +22,7 @@
 
 #include "common/vk_common.h"
 #include "gltf_loader.h"
-#include "gui.h"
+
 #include "platform/filesystem.h"
 
 #include "rendering/pipeline_state.h"
@@ -114,7 +114,7 @@ bool ConstantData::prepare(const vkb::ApplicationOptions &options)
 
 	// Add a GUI with the stats you want to monitor
 	stats->request_stats(std::set<vkb::StatIndex>{vkb::StatIndex::frame_times, vkb::StatIndex::gpu_load_store_cycles});
-	gui = std::make_unique<vkb::Gui>(*this, *window, stats.get());
+	// gui = std::make_unique<vkb::Gui>(*this, *window, stats.get());
 
 	return true;
 }
@@ -200,10 +200,10 @@ void ConstantData::draw_renderpass(vkb::CommandBuffer &command_buffer, vkb::Rend
 			descriptor_set_render_pipeline->draw(command_buffer, render_target);
 		}
 
-		if (gui)
-		{
-			gui->draw(command_buffer);
-		}
+		// if (gui)
+		// {
+		// 	// gui->draw(command_buffer);
+		// }
 
 		// Update the remaining bindings on all the descriptor sets
 		if (selected_method == Method::UpdateAfterBindDescriptorSets)
@@ -237,43 +237,43 @@ void ConstantData::draw_gui()
 		lines = lines * 2;
 	}
 
-	gui->show_options_window(
-	    /* body = */ [this]() {
-		    // Create a line for every config
-		    ImGui::Text("Method of pushing MVP to shader:");
+	// gui->show_options_window(
+	//     /* body = */ [this]() {
+	// 	    // Create a line for every config
+	// 	    ImGui::Text("Method of pushing MVP to shader:");
 
-		    if (camera->get_aspect_ratio() > 1.0f)
-		    {
-			    // In landscape, show all options following the heading
-			    ImGui::SameLine();
-		    }
+	// 	    if (camera->get_aspect_ratio() > 1.0f)
+	// 	    {
+	// 		    // In landscape, show all options following the heading
+	// 		    ImGui::SameLine();
+	// 	    }
 
-		    auto active_method = get_active_method();
+	// 	    auto active_method = get_active_method();
 
-		    // Create a radio button for every option
-		    if (ImGui::BeginCombo("##constant-data-method", methods[active_method].description))
-		    {
-			    for (size_t i = 0; i < methods.size(); ++i)
-			    {
-				    auto &method = methods[static_cast<Method>(i)];
-				    if (method.supported)
-				    {
-					    bool is_selected = active_method == static_cast<Method>(i);
-					    if (ImGui::Selectable(method.description, is_selected))
-					    {
-						    gui_method_value = static_cast<int>(i);
-					    }
+	// 	    // Create a radio button for every option
+	// 	    if (ImGui::BeginCombo("##constant-data-method", methods[active_method].description))
+	// 	    {
+	// 		    for (size_t i = 0; i < methods.size(); ++i)
+	// 		    {
+	// 			    auto &method = methods[static_cast<Method>(i)];
+	// 			    if (method.supported)
+	// 			    {
+	// 				    bool is_selected = active_method == static_cast<Method>(i);
+	// 				    if (ImGui::Selectable(method.description, is_selected))
+	// 				    {
+	// 					    gui_method_value = static_cast<int>(i);
+	// 				    }
 
-					    if (is_selected)
-					    {
-						    ImGui::SetItemDefaultFocus();
-					    }
-				    }
-			    }
-			    ImGui::EndCombo();
-		    }
-	    },
-	    /* lines = */ vkb::to_u32(lines));
+	// 				    if (is_selected)
+	// 				    {
+	// 					    ImGui::SetItemDefaultFocus();
+	// 				    }
+	// 			    }
+	// 		    }
+	// 		    ImGui::EndCombo();
+	// 	    }
+	//     },
+	//     /* lines = */ vkb::to_u32(lines));
 }
 
 std::unique_ptr<vkb::VulkanSample> create_constant_data()

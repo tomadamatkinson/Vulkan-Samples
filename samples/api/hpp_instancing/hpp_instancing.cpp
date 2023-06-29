@@ -461,12 +461,12 @@ void HPPInstancing::render(float delta_time)
 	}
 }
 
-void HPPInstancing::on_update_ui_overlay(vkb::HPPDrawer &drawer)
+void HPPInstancing::on_update_ui_overlay()
 {
-	if (drawer.header("Statistics"))
-	{
-		drawer.text("Instances: %d", INSTANCE_COUNT);
-	}
+	// if (drawer.header("Statistics"))
+	// {
+	// 	drawer.text("Instances: %d", INSTANCE_COUNT);
+	// }
 }
 
 bool HPPInstancing::resize(const uint32_t width, const uint32_t height)

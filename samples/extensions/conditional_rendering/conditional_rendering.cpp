@@ -377,35 +377,35 @@ void ConditionalRendering::render(float delta_time)
 	}
 }
 
-void ConditionalRendering::on_update_ui_overlay(vkb::Drawer &drawer)
+void ConditionalRendering::on_update_ui_overlay()
 {
-	if (drawer.header("Visibility"))
-	{
-		if (drawer.button("All"))
-		{
-			std::fill(conditional_visibility_list.begin(), conditional_visibility_list.end(), 1);
-			update_visibility_buffer();
-		}
-		ImGui::SameLine();
-		if (drawer.button("None"))
-		{
-			std::fill(conditional_visibility_list.begin(), conditional_visibility_list.end(), 0);
-			update_visibility_buffer();
-		}
-		ImGui::NewLine();
+	// if (drawer.header("Visibility"))
+	// {
+	// 	if (drawer.button("All"))
+	// 	{
+	// 		std::fill(conditional_visibility_list.begin(), conditional_visibility_list.end(), 1);
+	// 		update_visibility_buffer();
+	// 	}
+	// 	ImGui::SameLine();
+	// 	if (drawer.button("None"))
+	// 	{
+	// 		std::fill(conditional_visibility_list.begin(), conditional_visibility_list.end(), 0);
+	// 		update_visibility_buffer();
+	// 	}
+	// 	ImGui::NewLine();
 
-		ImGui::BeginChild("InnerRegion", ImVec2(200.0f, 400.0f), false);
-		uint32_t idx = 0;
-		for (auto &node : linear_scene_nodes)
-		{
-			if (drawer.checkbox(("[" + std::to_string(idx) + "] " + node.name).c_str(), &conditional_visibility_list[idx]))
-			{
-				update_visibility_buffer();
-			}
-			idx++;
-		}
-		ImGui::EndChild();
-	}
+	// 	ImGui::BeginChild("InnerRegion", ImVec2(200.0f, 400.0f), false);
+	// 	uint32_t idx = 0;
+	// 	for (auto &node : linear_scene_nodes)
+	// 	{
+	// 		if (drawer.checkbox(("[" + std::to_string(idx) + "] " + node.name).c_str(), &conditional_visibility_list[idx]))
+	// 		{
+	// 			update_visibility_buffer();
+	// 		}
+	// 		idx++;
+	// 	}
+	// 	ImGui::EndChild();
+	// }
 }
 
 bool ConditionalRendering::resize(const uint32_t width, const uint32_t height)

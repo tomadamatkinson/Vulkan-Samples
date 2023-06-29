@@ -208,6 +208,7 @@ set(IMGUI_FILES
     "${IMGUI_DIR}/imgui_demo.cpp"
     "${IMGUI_DIR}/imgui_draw.cpp"
     "${IMGUI_DIR}/imgui_widgets.cpp"
+    "${IMGUI_DIR}/imgui_tables.cpp"
     "${IMGUI_DIR}/imconfig.h"
     "${IMGUI_DIR}/imgui.h"
     "${IMGUI_DIR}/imgui_internal.h"
@@ -216,10 +217,22 @@ set(IMGUI_FILES
     "${IMGUI_DIR}/imstb_truetype.h")
 
 add_library(imgui STATIC ${IMGUI_FILES})
-
 target_include_directories(imgui PUBLIC ${IMGUI_DIR})
-
 set_target_properties(imgui PROPERTIES FOLDER "ThirdParty" POSITION_INDEPENDENT_CODE ON)
+
+# implot
+set(IMGUI_PLOT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/implot")
+set(IMGUI_PLOT_FILES
+    "${IMGUI_PLOT_DIR}/implot.cpp"
+    "${IMGUI_PLOT_DIR}/implot.h"
+    "${IMGUI_PLOT_DIR}/implot_internal.h"
+    "${IMGUI_PLOT_DIR}/implot_items.cpp"
+    "${IMGUI_PLOT_DIR}/implot_demo.cpp")
+
+add_library(implot STATIC ${IMGUI_PLOT_FILES})
+target_include_directories(implot PUBLIC ${IMGUI_PLOT_DIR})
+target_link_libraries(implot PUBLIC imgui)
+set_target_properties(implot PROPERTIES FOLDER "ThirdParty" POSITION_INDEPENDENT_CODE ON)
 
 # glslang
 option(ENABLE_SPVREMAPPER OFF)

@@ -378,16 +378,16 @@ void PushDescriptors::render(float delta_time)
 	}
 }
 
-void PushDescriptors::on_update_ui_overlay(vkb::Drawer &drawer)
+void PushDescriptors::on_update_ui_overlay()
 {
-	if (drawer.header("Settings"))
-	{
-		drawer.checkbox("Animate", &animate);
-	}
-	if (drawer.header("Device properties"))
-	{
-		drawer.text("maxPushDescriptors: %d", push_descriptor_properties.maxPushDescriptors);
-	}
+	// if (drawer.header("Settings"))
+	// {
+	// 	drawer.checkbox("Animate", &animate);
+	// }
+	// if (drawer.header("Device properties"))
+	// {
+	// 	drawer.text("maxPushDescriptors: %d", push_descriptor_properties.maxPushDescriptors);
+	// }
 }
 
 std::unique_ptr<vkb::VulkanSample> create_push_descriptors()

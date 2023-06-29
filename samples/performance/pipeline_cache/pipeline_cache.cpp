@@ -21,7 +21,7 @@
 
 #include "common/logging.h"
 #include "core/device.h"
-#include "gui.h"
+
 #include "platform/filesystem.h"
 #include "platform/window.h"
 
@@ -112,7 +112,7 @@ bool PipelineCache::prepare(const vkb::ApplicationOptions &options)
 	button_size.x = button_size.x * dpi_factor;
 	button_size.y = button_size.y * dpi_factor;
 
-	gui = std::make_unique<vkb::Gui>(*this, *window, stats.get());
+	// gui = std::make_unique<vkb::Gui>(*this, *window, stats.get());
 
 	load_scene("scenes/sponza/Sponza01.gltf");
 
@@ -133,43 +133,43 @@ bool PipelineCache::prepare(const vkb::ApplicationOptions &options)
 
 void PipelineCache::draw_gui()
 {
-	gui->show_options_window(
-	    /* body = */ [this]() {
-		    if (ImGui::Checkbox("Pipeline cache", &enable_pipeline_cache))
-		    {
-			    vkb::ResourceCache &resource_cache = device->get_resource_cache();
+	// gui->show_options_window(
+	//     /* body = */ [this]() {
+	// 	    if (ImGui::Checkbox("Pipeline cache", &enable_pipeline_cache))
+	// 	    {
+	// 		    vkb::ResourceCache &resource_cache = device->get_resource_cache();
 
-			    if (enable_pipeline_cache)
-			    {
-				    // Use pipeline cache to store pipelines
-				    resource_cache.set_pipeline_cache(pipeline_cache);
-			    }
-			    else
-			    {
-				    // Don't use a pipeline cache
-				    resource_cache.set_pipeline_cache(VK_NULL_HANDLE);
-			    }
-		    }
+	// 		    if (enable_pipeline_cache)
+	// 		    {
+	// 			    // Use pipeline cache to store pipelines
+	// 			    resource_cache.set_pipeline_cache(pipeline_cache);
+	// 		    }
+	// 		    else
+	// 		    {
+	// 			    // Don't use a pipeline cache
+	// 			    resource_cache.set_pipeline_cache(VK_NULL_HANDLE);
+	// 		    }
+	// 	    }
 
-		    ImGui::SameLine();
+	// 	    ImGui::SameLine();
 
-		    if (ImGui::Button("Destroy Pipelines", button_size))
-		    {
-			    device->wait_idle();
-			    device->get_resource_cache().clear_pipelines();
-			    record_frame_time_next_frame = true;
-		    }
+	// 	    if (ImGui::Button("Destroy Pipelines", button_size))
+	// 	    {
+	// 		    device->wait_idle();
+	// 		    device->get_resource_cache().clear_pipelines();
+	// 		    record_frame_time_next_frame = true;
+	// 	    }
 
-		    if (rebuild_pipelines_frame_time_ms > 0.0f)
-		    {
-			    ImGui::Text("Pipeline rebuild frame time: %.1f ms", rebuild_pipelines_frame_time_ms);
-		    }
-		    else
-		    {
-			    ImGui::Text("Pipeline rebuild frame time: N/A");
-		    }
-	    },
-	    /* lines = */ 2);
+	// 	    if (rebuild_pipelines_frame_time_ms > 0.0f)
+	// 	    {
+	// 		    ImGui::Text("Pipeline rebuild frame time: %.1f ms", rebuild_pipelines_frame_time_ms);
+	// 	    }
+	// 	    else
+	// 	    {
+	// 		    ImGui::Text("Pipeline rebuild frame time: N/A");
+	// 	    }
+	//     },
+	//     /* lines = */ 2);
 }
 
 void PipelineCache::update(float delta_time)

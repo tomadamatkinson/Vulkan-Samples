@@ -19,7 +19,7 @@
 
 #include "common/vk_common.h"
 #include "gltf_loader.h"
-#include "gui.h"
+
 #include "platform/filesystem.h"
 
 #include "rendering/subpasses/forward_subpass.h"
@@ -57,7 +57,7 @@ bool WaitIdle::prepare(const vkb::ApplicationOptions &options)
 
 	// Add a GUI with the stats you want to monitor
 	stats->request_stats({vkb::StatIndex::frame_times});
-	gui = std::make_unique<vkb::Gui>(*this, *window, stats.get());
+	// gui = std::make_unique<vkb::Gui>(*this, *window, stats.get());
 
 	return true;
 }
@@ -95,16 +95,16 @@ void WaitIdle::draw_gui()
 	bool     landscape = camera->get_aspect_ratio() > 1.0f;
 	uint32_t lines     = landscape ? 1 : 2;
 
-	gui->show_options_window(
-	    /* body = */ [&]() {
-		    ImGui::RadioButton("Wait Idle", &wait_idle_enabled, 1);
-		    if (landscape)
-		    {
-			    ImGui::SameLine();
-		    }
-		    ImGui::RadioButton("Fences", &wait_idle_enabled, 0);
-	    },
-	    /* lines = */ lines);
+	// gui->show_options_window(
+	//     /* body = */ [&]() {
+	// 	    ImGui::RadioButton("Wait Idle", &wait_idle_enabled, 1);
+	// 	    if (landscape)
+	// 	    {
+	// 		    ImGui::SameLine();
+	// 	    }
+	// 	    ImGui::RadioButton("Fences", &wait_idle_enabled, 0);
+	//     },
+	//     /* lines = */ lines);
 }
 
 std::unique_ptr<vkb::VulkanSample> create_wait_idle()

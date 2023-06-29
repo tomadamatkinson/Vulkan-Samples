@@ -20,7 +20,7 @@
 #include "api_vulkan_sample.h"
 #include "common/vk_common.h"
 #include "gltf_loader.h"
-#include "gui.h"
+
 #include "platform/filesystem.h"
 
 #include "scene_graph/components/orthographic_camera.h"
@@ -40,13 +40,13 @@ AsyncComputeSample::AsyncComputeSample()
 
 void AsyncComputeSample::draw_gui()
 {
-	gui->show_options_window(
-	    /* body = */ [this]() {
-		    ImGui::Checkbox("Enable async queues", &async_enabled);
-		    ImGui::Checkbox("Double buffer HDR", &double_buffer_hdr_frames);
-		    ImGui::Checkbox("Rotate shadows", &rotate_shadows);
-	    },
-	    /* lines = */ 3);
+	// gui->show_options_window(
+	//     /* body = */ [this]() {
+	// 	    ImGui::Checkbox("Enable async queues", &async_enabled);
+	// 	    ImGui::Checkbox("Double buffer HDR", &double_buffer_hdr_frames);
+	// 	    ImGui::Checkbox("Rotate shadows", &rotate_shadows);
+	//     },
+	//     /* lines = */ 3);
 }
 
 static VkExtent3D downsample_extent(const VkExtent3D &extent, uint32_t level)
@@ -287,7 +287,7 @@ bool AsyncComputeSample::prepare(const vkb::ApplicationOptions &options)
 	                     },
 	                     config);
 
-	gui = std::make_unique<vkb::Gui>(*this, *window, stats.get());
+	// // gui = std::make_unique<vkb::Gui>(*this, *window, stats.get());
 
 	// Store the start time to calculate rotation
 	start_time = std::chrono::system_clock::now();

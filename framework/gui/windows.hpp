@@ -1,4 +1,6 @@
-/* Copyright (c) 2018-2020, Arm Limited and Contributors
+/* Copyright (c) 2018-2023, Arm Limited and Contributors
+ * Copyright (c) 2019-2023, Sascha Willems
+ * Copyright (c) 2023, Tom Atkinson
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -17,26 +19,27 @@
 
 #pragma once
 
-#include <json.hpp>
+#include <gui/gui.hpp>
+#include <gui/widgets/panel.hpp>
 
 namespace vkb
 {
-namespace graphing
+const char *APP_INFO_WINDOW_ID = "app_info_window";
+
+std::unique_ptr<Widget> create_app_info_window(const std::string &app_name)
 {
-class Node
+	return ui<Panel>(APP_INFO_WINDOW_ID)
+	    .title(app_name)
+	    .done();
+}
+
+const char *STATS_WINDOW_ID = "stats_window";
+
+std::unique_ptr<Widget> create_stats_window()
 {
-  public:
-	Node(){};
+	return ui<Panel>(STATS_WINDOW_ID)
+	    .title("Stats")
+	    .done();
+}
 
-	Node(size_t id, const char *title, const char *style = NULL, const nlohmann::json &data = {});
-
-	template <typename T>
-	static std::uintptr_t handle_to_uintptr_t(T handle)
-	{
-		return reinterpret_cast<std::uintptr_t>(reinterpret_cast<void *>(handle));
-	}
-
-	nlohmann::json attributes;
-};
-}        // namespace graphing
 }        // namespace vkb

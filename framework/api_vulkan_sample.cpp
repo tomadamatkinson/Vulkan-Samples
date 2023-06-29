@@ -71,10 +71,8 @@ bool ApiVulkanSample::prepare(const vkb::ApplicationOptions &options)
 	width  = get_render_context().get_surface_extent().width;
 	height = get_render_context().get_surface_extent().height;
 
-	gui = std::make_unique<vkb::Gui>(*this, *window, /*stats=*/nullptr, 15.0f, true);
-	gui->prepare(pipeline_cache, render_pass,
-	             {load_shader("uioverlay/uioverlay.vert", VK_SHADER_STAGE_VERTEX_BIT),
-	              load_shader("uioverlay/uioverlay.frag", VK_SHADER_STAGE_FRAGMENT_BIT)});
+	gui = std::make_unique<vkb::VulkanGuiRenderer>(get_render_context());
+	gui->prepare();
 
 	return true;
 }
@@ -136,10 +134,10 @@ bool ApiVulkanSample::resize(const uint32_t _width, const uint32_t _height)
 
 	if ((width > 0.0f) && (height > 0.0f))
 	{
-		if (gui)
-		{
-			gui->resize(width, height);
-		}
+		// if (gui)
+		// {
+		// 	gui->resize(width, height);
+		// }
 	}
 
 	// Command buffers need to be recreated as they may store
@@ -188,10 +186,10 @@ void ApiVulkanSample::input_event(const vkb::InputEvent &input_event)
 
 	bool gui_captures_event = false;
 
-	if (gui)
-	{
-		gui_captures_event = gui->input_event(input_event);
-	}
+	// if (gui)
+	// {
+	// 	gui_captures_event = gui->input_event(input_event);
+	// }
 
 	if (!gui_captures_event)
 	{
@@ -311,10 +309,10 @@ void ApiVulkanSample::input_event(const vkb::InputEvent &input_event)
 						paused = !paused;
 						break;
 					case vkb::KeyCode::F1:
-						if (gui)
-						{
-							gui->visible = !gui->visible;
-						}
+						// if (gui)
+						// {
+						// 	gui->visible = !gui->visible;
+						// }
 					default:
 						break;
 				}
@@ -441,33 +439,32 @@ VkPipelineShaderStageCreateInfo ApiVulkanSample::load_shader(const std::string &
 
 void ApiVulkanSample::update_overlay(float delta_time)
 {
-	if (gui)
-	{
-		gui->show_simple_window(get_name(), vkb::to_u32(1.0f / delta_time), [this]() {
-			on_update_ui_overlay(gui->get_drawer());
-		});
+	// if (gui)
+	// {
+	// 	gui->show_simple_window(get_name(), vkb::to_u32(1.0f / delta_time), [this]() {
+	// 		on_update_ui_overlay();
+	// 	});
 
-		gui->update(delta_time);
+	// 	gui->update(delta_time);
 
-		if (gui->update_buffers() || gui->get_drawer().is_dirty())
-		{
-			build_command_buffers();
-			gui->get_drawer().clear();
-		}
-	}
+	// 	if (gui->update_buffers())
+	// 	{
+	// 		build_command_buffers();
+	// 	}
+	// }
 }
 
 void ApiVulkanSample::draw_ui(const VkCommandBuffer command_buffer)
 {
-	if (gui)
-	{
-		const VkViewport viewport = vkb::initializers::viewport(static_cast<float>(width), static_cast<float>(height), 0.0f, 1.0f);
-		const VkRect2D   scissor  = vkb::initializers::rect2D(width, height, 0, 0);
-		vkCmdSetViewport(command_buffer, 0, 1, &viewport);
-		vkCmdSetScissor(command_buffer, 0, 1, &scissor);
+	// if (gui)
+	// {
+	// 	const VkViewport viewport = vkb::initializers::viewport(static_cast<float>(width), static_cast<float>(height), 0.0f, 1.0f);
+	// 	const VkRect2D   scissor  = vkb::initializers::rect2D(width, height, 0, 0);
+	// 	vkCmdSetViewport(command_buffer, 0, 1, &viewport);
+	// 	vkCmdSetScissor(command_buffer, 0, 1, &scissor);
 
-		gui->draw(command_buffer);
-	}
+	// 	gui->draw(command_buffer);
+	// }
 }
 
 void ApiVulkanSample::prepare_frame()
@@ -853,7 +850,7 @@ void ApiVulkanSample::update_render_pass_flags(uint32_t flags)
 	VK_CHECK(vkCreateRenderPass(device->get_handle(), &render_pass_create_info, nullptr, &render_pass));
 }
 
-void ApiVulkanSample::on_update_ui_overlay(vkb::Drawer &drawer)
+void ApiVulkanSample::on_update_ui_overlay()
 {}
 
 void ApiVulkanSample::create_swapchain_buffers()
@@ -876,10 +873,10 @@ void ApiVulkanSample::create_swapchain_buffers()
 			color_attachment_view.pNext                 = NULL;
 			color_attachment_view.format                = render_context->get_swapchain().get_format();
 			color_attachment_view.components            = {
-                VK_COMPONENT_SWIZZLE_R,
-                VK_COMPONENT_SWIZZLE_G,
-                VK_COMPONENT_SWIZZLE_B,
-                VK_COMPONENT_SWIZZLE_A};
+			               VK_COMPONENT_SWIZZLE_R,
+			               VK_COMPONENT_SWIZZLE_G,
+			               VK_COMPONENT_SWIZZLE_B,
+			               VK_COMPONENT_SWIZZLE_A};
 			color_attachment_view.subresourceRange.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
 			color_attachment_view.subresourceRange.baseMipLevel   = 0;
 			color_attachment_view.subresourceRange.levelCount     = 1;

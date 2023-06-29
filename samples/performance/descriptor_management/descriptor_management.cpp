@@ -19,7 +19,7 @@
 
 #include "common/vk_common.h"
 #include "gltf_loader.h"
-#include "gui.h"
+
 #include "platform/filesystem.h"
 
 #include "rendering/subpasses/forward_subpass.h"
@@ -59,7 +59,7 @@ bool DescriptorManagement::prepare(const vkb::ApplicationOptions &options)
 
 	// Add a GUI with the stats you want to monitor
 	stats->request_stats({vkb::StatIndex::frame_times});
-	gui = std::make_unique<vkb::Gui>(*this, *window, stats.get());
+	// gui = std::make_unique<vkb::Gui>(*this, *window, stats.get());
 
 	return true;
 }
@@ -109,39 +109,39 @@ void DescriptorManagement::draw_gui()
 		lines = lines * 2;
 	}
 
-	gui->show_options_window(
-	    /* body = */ [this, lines]() {
-		    // For every option set
-		    for (size_t i = 0; i < radio_buttons.size(); ++i)
-		    {
-			    // Avoid conflicts between buttons with identical labels
-			    ImGui::PushID(vkb::to_u32(i));
+	// gui->show_options_window(
+	//     /* body = */ [this, lines]() {
+	// 	    // For every option set
+	// 	    for (size_t i = 0; i < radio_buttons.size(); ++i)
+	// 	    {
+	// 		    // Avoid conflicts between buttons with identical labels
+	// 		    ImGui::PushID(vkb::to_u32(i));
 
-			    auto &radio_button = radio_buttons[i];
+	// 		    auto &radio_button = radio_buttons[i];
 
-			    ImGui::Text("%s: ", radio_button->description);
+	// 		    ImGui::Text("%s: ", radio_button->description);
 
-			    if (camera->get_aspect_ratio() > 1.0f)
-			    {
-				    // In landscape, show all options following the heading
-				    ImGui::SameLine();
-			    }
+	// 		    if (camera->get_aspect_ratio() > 1.0f)
+	// 		    {
+	// 			    // In landscape, show all options following the heading
+	// 			    ImGui::SameLine();
+	// 		    }
 
-			    // For every option
-			    for (size_t j = 0; j < radio_button->options.size(); ++j)
-			    {
-				    ImGui::RadioButton(radio_button->options[j], &radio_button->value, vkb::to_u32(j));
+	// 		    // For every option
+	// 		    for (size_t j = 0; j < radio_button->options.size(); ++j)
+	// 		    {
+	// 			    ImGui::RadioButton(radio_button->options[j], &radio_button->value, vkb::to_u32(j));
 
-				    if (j < radio_button->options.size() - 1)
-				    {
-					    ImGui::SameLine();
-				    }
-			    }
+	// 			    if (j < radio_button->options.size() - 1)
+	// 			    {
+	// 				    ImGui::SameLine();
+	// 			    }
+	// 		    }
 
-			    ImGui::PopID();
-		    }
-	    },
-	    /* lines = */ vkb::to_u32(lines));
+	// 		    ImGui::PopID();
+	// 	    }
+	//     },
+	//     /* lines = */ vkb::to_u32(lines));
 }
 
 std::unique_ptr<vkb::VulkanSample> create_descriptor_management()

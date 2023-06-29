@@ -63,108 +63,6 @@ struct HPPFont
 	float                size = 0.0f;
 };
 
-/**
- * @brief Responsible for drawing new elements into the gui
- */
-class HPPDrawer
-{
-  public:
-	HPPDrawer() = default;
-
-	/**
-	 * @brief Clears the dirty bit set
-	 */
-	void clear();
-
-	/**
-	 * @brief Returns true if the drawer has been updated
-	 */
-	bool is_dirty() const;
-
-	/**
-	 * @brief May be used to force drawer update
-	 */
-	void set_dirty(bool dirty);
-
-	/**
-	 * @brief Adds a collapsable header item to the gui
-	 * @param caption The text to display
-	 * @returns True if adding item was successful
-	 */
-	bool header(const std::string &caption) const;
-
-	/**
-	 * @brief Adds a checkbox to the gui
-	 * @param caption The text to display
-	 * @param value The boolean value to map the checkbox to
-	 * @returns True if adding item was successful
-	 */
-	bool checkbox(const std::string &caption, bool *value);
-
-	/**
-	 * @brief Adds a checkbox to the gui
-	 * @param caption The text to display
-	 * @param value The integer value to map the checkbox to
-	 * @returns True if adding item was successful
-	 */
-	bool checkbox(const std::string &caption, int32_t *value);
-
-	/**
-	 * @brief Adds a number input field to the gui
-	 * @param caption The text to display
-	 * @param value The value to map to
-	 * @param step The step increment
-	 * @param precision The precision
-	 * @returns True if adding item was successful
-	 */
-	bool input_float(const std::string &caption, float *value, float step, uint32_t precision);
-
-	/**
-	 * @brief Adds a slide bar to the gui for floating points to the gui
-	 * @param caption The text to display
-	 * @param value The value to map to
-	 * @param min The minimum value
-	 * @param max The maximum value
-	 * @returns True if adding item was successful
-	 */
-	bool slider_float(const std::string &caption, float *value, float min, float max);
-
-	/**
-	 * @brief Adds a slide bar to the gui for integers to the gui
-	 * @param caption The text to display
-	 * @param value The value to map to
-	 * @param min The minimum value
-	 * @param max The maximum value
-	 * @returns True if adding item was successful
-	 */
-	bool slider_int(const std::string &caption, int32_t *value, int32_t min, int32_t max);
-
-	/**
-	 * @brief Adds a multiple choice drop box to the gui
-	 * @param caption The text to display
-	 * @param itemindex The item index to display
-	 * @param items The items to display in the box
-	 * @returns True if adding item was successful
-	 */
-	bool combo_box(const std::string &caption, int32_t *itemindex, std::vector<std::string> items);
-
-	/**
-	 * @brief Adds a clickable button to the gui
-	 * @param caption The text to display
-	 * @returns True if adding item was successful
-	 */
-	bool button(const std::string &caption);
-
-	/**
-	 * @brief Adds a label to the gui
-	 * @param formatstr The format string
-	 */
-	void text(const char *formatstr, ...);
-
-  private:
-	bool dirty = false;
-};
-
 class HPPVulkanSample;
 
 /**
@@ -313,8 +211,6 @@ class HPPGui
 	 */
 	const StatsView &get_stats_view() const;
 
-	HPPDrawer &get_drawer();
-
 	HPPFont const &get_font(const std::string &font_name = HPPGui::default_font) const;
 
 	bool is_debug_view_active() const;
@@ -366,7 +262,6 @@ class HPPGui
 	float                                    content_scale_factor    = 1.0f;        // Scale factor to apply due to a difference between the window and GL pixel sizes
 	float                                    dpi_factor              = 1.0f;        // Scale factor to apply to the size of gui elements (expressed in dp)
 	bool                                     explicit_update         = false;
-	HPPDrawer                                drawer;
 	std::vector<HPPFont>                     fonts;
 	std::unique_ptr<vkb::core::HPPImage>     font_image;
 	std::unique_ptr<vkb::core::HPPImageView> font_image_view;

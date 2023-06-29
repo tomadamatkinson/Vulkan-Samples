@@ -142,17 +142,17 @@ void DescriptorIndexing::render(float delta_time)
 	ApiVulkanSample::submit_frame();
 }
 
-void DescriptorIndexing::on_update_ui_overlay(vkb::Drawer &drawer)
+void DescriptorIndexing::on_update_ui_overlay()
 {
-	if (drawer.header("Device properties"))
-	{
-		// Display some common properties. Only bother with sampled image since that's what we're using here.
-		drawer.text("maxDescriptorSetUpdateAfterBindSampledImages: %u", descriptor_indexing_properties.maxDescriptorSetUpdateAfterBindSampledImages);
-		drawer.text("maxPerStageUpdateAfterBindResources: %u", descriptor_indexing_properties.maxPerStageUpdateAfterBindResources);
-		drawer.text("quadDivergentImplicitLod: %u", descriptor_indexing_properties.quadDivergentImplicitLod);
-		drawer.text("shaderSampledImageArrayNonUniformIndexingNative: %u", descriptor_indexing_properties.shaderSampledImageArrayNonUniformIndexingNative);
-		drawer.text("maxUpdateAfterBindDescriptorsInAllPools: %u", descriptor_indexing_properties.maxUpdateAfterBindDescriptorsInAllPools);
-	}
+	// if (drawer.header("Device properties"))
+	// {
+	// 	// Display some common properties. Only bother with sampled image since that's what we're using here.
+	// 	drawer.text("maxDescriptorSetUpdateAfterBindSampledImages: %u", descriptor_indexing_properties.maxDescriptorSetUpdateAfterBindSampledImages);
+	// 	drawer.text("maxPerStageUpdateAfterBindResources: %u", descriptor_indexing_properties.maxPerStageUpdateAfterBindResources);
+	// 	drawer.text("quadDivergentImplicitLod: %u", descriptor_indexing_properties.quadDivergentImplicitLod);
+	// 	drawer.text("shaderSampledImageArrayNonUniformIndexingNative: %u", descriptor_indexing_properties.shaderSampledImageArrayNonUniformIndexingNative);
+	// 	drawer.text("maxUpdateAfterBindDescriptorsInAllPools: %u", descriptor_indexing_properties.maxUpdateAfterBindDescriptorsInAllPools);
+	// }
 }
 
 void DescriptorIndexing::create_immutable_sampler_descriptor_set()

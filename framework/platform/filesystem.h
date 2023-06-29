@@ -21,11 +21,11 @@
 #include <cstdlib>
 #include <fstream>
 #include <string>
-#include <sys/stat.h>
 #include <unordered_map>
 #include <vector>
 
 #include <json.hpp>
+#include <sys/stat.h>
 
 namespace vkb
 {
@@ -35,17 +35,16 @@ namespace path
 {
 enum Type
 {
-	//Relative paths
+	// Relative paths
 	Assets,
 	Shaders,
 	Storage,
 	Screenshots,
 	Logs,
-	Graphs,
 	/* NewFolder */
 	TotalRelativePathTypes,
 
-	//Special paths
+	// Special paths
 	ExternalStorage,
 	WorkingDir = ExternalStorage,
 	Temp
@@ -70,7 +69,7 @@ const std::string get(const Type type, const std::string &file = "");
  */
 bool is_directory(const std::string &path);
 
-/** 
+/**
  * @brief Checks if a file exists
  * @param filename The filename to check
  * @return True if the path points to a valid file, false if not
@@ -148,12 +147,5 @@ void write_temp(const std::vector<uint8_t> &data, const std::string &filename, c
  */
 void write_image(const uint8_t *data, const std::string &filename, const uint32_t width, const uint32_t height, const uint32_t components, const uint32_t row_stride);
 
-/**
- * @brief Helper to output a json graph
- * 
- * @param data A json object
- * @param filename The name of the file
- */
-bool write_json(nlohmann::json &data, const std::string &filename);
 }        // namespace fs
 }        // namespace vkb

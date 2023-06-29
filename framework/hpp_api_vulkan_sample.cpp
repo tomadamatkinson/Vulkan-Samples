@@ -418,14 +418,13 @@ void HPPApiVulkanSample::update_overlay(float delta_time)
 {
 	if (gui)
 	{
-		gui->show_simple_window(get_name(), vkb::to_u32(1.0f / delta_time), [this]() { on_update_ui_overlay(gui->get_drawer()); });
+		gui->show_simple_window(get_name(), vkb::to_u32(1.0f / delta_time), [this]() { on_update_ui_overlay(); });
 
 		gui->update(delta_time);
 
-		if (gui->update_buffers() || gui->get_drawer().is_dirty())
+		if (gui->update_buffers() )
 		{
 			build_command_buffers();
-			gui->get_drawer().clear();
 		}
 	}
 }
@@ -762,7 +761,7 @@ void HPPApiVulkanSample::update_render_pass_flags(RenderPassCreateFlags flags)
 	render_pass = get_device()->get_handle().createRenderPass(render_pass_create_info);
 }
 
-void HPPApiVulkanSample::on_update_ui_overlay(vkb::HPPDrawer &drawer)
+void HPPApiVulkanSample::on_update_ui_overlay()
 {}
 
 void HPPApiVulkanSample::create_swapchain_buffers()

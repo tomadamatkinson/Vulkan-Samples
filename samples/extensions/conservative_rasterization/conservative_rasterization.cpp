@@ -612,26 +612,26 @@ void ConservativeRasterization::render(float delta_time)
 	}
 }
 
-void ConservativeRasterization::on_update_ui_overlay(vkb::Drawer &drawer)
+void ConservativeRasterization::on_update_ui_overlay()
 {
-	if (drawer.header("Settings"))
-	{
-		if (drawer.checkbox("Conservative rasterization", &conservative_raster_enabled))
-		{
-			build_command_buffers();
-		}
-	}
-	if (drawer.header("Device properties"))
-	{
-		drawer.text("maxExtraPrimitiveOverestimationSize: %f", conservative_raster_properties.maxExtraPrimitiveOverestimationSize);
-		drawer.text("extraPrimitiveOverestimationSizeGranularity: %f", conservative_raster_properties.extraPrimitiveOverestimationSizeGranularity);
-		drawer.text("primitiveUnderestimation:  %s", conservative_raster_properties.primitiveUnderestimation ? "yes" : "no");
-		drawer.text("conservativePointAndLineRasterization:  %s", conservative_raster_properties.conservativePointAndLineRasterization ? "yes" : "no");
-		drawer.text("degenerateTrianglesRasterized: %s", conservative_raster_properties.degenerateTrianglesRasterized ? "yes" : "no");
-		drawer.text("degenerateLinesRasterized: %s", conservative_raster_properties.degenerateLinesRasterized ? "yes" : "no");
-		drawer.text("fullyCoveredFragmentShaderInputVariable: %s", conservative_raster_properties.fullyCoveredFragmentShaderInputVariable ? "yes" : "no");
-		drawer.text("conservativeRasterizationPostDepthCoverage: %s", conservative_raster_properties.conservativeRasterizationPostDepthCoverage ? "yes" : "no");
-	}
+	// if (drawer.header("Settings"))
+	// {
+	// 	if (drawer.checkbox("Conservative rasterization", &conservative_raster_enabled))
+	// 	{
+	// 		build_command_buffers();
+	// 	}
+	// }
+	// if (drawer.header("Device properties"))
+	// {
+	// 	drawer.text("maxExtraPrimitiveOverestimationSize: %f", conservative_raster_properties.maxExtraPrimitiveOverestimationSize);
+	// 	drawer.text("extraPrimitiveOverestimationSizeGranularity: %f", conservative_raster_properties.extraPrimitiveOverestimationSizeGranularity);
+	// 	drawer.text("primitiveUnderestimation:  %s", conservative_raster_properties.primitiveUnderestimation ? "yes" : "no");
+	// 	drawer.text("conservativePointAndLineRasterization:  %s", conservative_raster_properties.conservativePointAndLineRasterization ? "yes" : "no");
+	// 	drawer.text("degenerateTrianglesRasterized: %s", conservative_raster_properties.degenerateTrianglesRasterized ? "yes" : "no");
+	// 	drawer.text("degenerateLinesRasterized: %s", conservative_raster_properties.degenerateLinesRasterized ? "yes" : "no");
+	// 	drawer.text("fullyCoveredFragmentShaderInputVariable: %s", conservative_raster_properties.fullyCoveredFragmentShaderInputVariable ? "yes" : "no");
+	// 	drawer.text("conservativeRasterizationPostDepthCoverage: %s", conservative_raster_properties.conservativeRasterizationPostDepthCoverage ? "yes" : "no");
+	// }
 }
 
 std::unique_ptr<vkb::VulkanSample> create_conservative_rasterization()

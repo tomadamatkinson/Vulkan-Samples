@@ -135,7 +135,7 @@ class TerrainTessellation : public ApiVulkanSample
 	bool         prepare(const vkb::ApplicationOptions &options) override;
 	virtual void render(float delta_time) override;
 	virtual void view_changed() override;
-	virtual void on_update_ui_overlay(vkb::Drawer &drawer) override;
+	virtual void on_update_ui_overlay() override;
 };
 
 std::unique_ptr<vkb::Application> create_terrain_tessellation();

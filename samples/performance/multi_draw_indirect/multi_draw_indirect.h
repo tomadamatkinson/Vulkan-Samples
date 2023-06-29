@@ -135,7 +135,7 @@ class MultiDrawIndirect : public ApiVulkanSample
 
 	void request_gpu_features(vkb::PhysicalDevice &gpu) override;
 	void build_command_buffers() override;
-	void on_update_ui_overlay(vkb::Drawer &drawer) override;
+	void on_update_ui_overlay() override;
 	void create_sampler();
 	void load_scene();
 	void initialize_resources();

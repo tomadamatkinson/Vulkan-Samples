@@ -20,9 +20,12 @@
 #include "common/error.h"
 
 VKBP_DISABLE_WARNINGS()
-#include "common/glm_common.h"
 #include <imgui.h>
+
+#include "common/glm_common.h"
 VKBP_ENABLE_WARNINGS()
+
+#include <gui/widget.hpp>
 
 #include "api_vulkan_sample.h"
 #include "common/helpers.h"
@@ -291,31 +294,12 @@ void VulkanSample::update_stats(float delta_time)
 	}
 }
 
-void VulkanSample::update_gui(float delta_time)
-{
-	if (gui)
-	{
-		if (gui->is_debug_view_active())
-		{
-			update_debug_window();
-		}
-
-		gui->new_frame();
-
-		gui->show_top_window(get_name(), stats.get(), &get_debug_info());
-
-		// Samples can override this
-		draw_gui();
-
-		gui->update(delta_time);
-	}
-}
-
 void VulkanSample::update(float delta_time)
 {
 	update_scene(delta_time);
 
-	update_gui(delta_time);
+	auto extent = window->get_extent();
+	vkb::GUI::draw(delta_time, extent.width, extent.height);
 
 	auto &command_buffer = render_context->begin();
 
@@ -328,6 +312,7 @@ void VulkanSample::update(float delta_time)
 	draw(command_buffer, render_context->get_active_frame().get_render_target());
 
 	stats->end_sampling(command_buffer);
+
 	command_buffer.end();
 
 	render_context->submit(command_buffer);
@@ -391,7 +376,8 @@ void VulkanSample::draw_renderpass(CommandBuffer &command_buffer, RenderTarget &
 
 	if (gui)
 	{
-		gui->draw(command_buffer);
+		VulkanGuiRenderContext context{command_buffer.get_handle()};
+		gui->render(&context);
 	}
 
 	command_buffer.end_render_pass();
@@ -408,11 +394,6 @@ void VulkanSample::render(CommandBuffer &command_buffer)
 bool VulkanSample::resize(uint32_t width, uint32_t height)
 {
 	Application::resize(width, height);
-
-	if (gui)
-	{
-		gui->resize(width, height);
-	}
 
 	if (scene && scene->has_component<sg::Script>())
 	{
@@ -437,10 +418,10 @@ void VulkanSample::input_event(const InputEvent &input_event)
 
 	bool gui_captures_event = false;
 
-	if (gui)
-	{
-		gui_captures_event = gui->input_event(input_event);
-	}
+	// if (gui)
+	// {
+	// 	gui_captures_event = gui->input_event(input_event);
+	// }
 
 	if (!gui_captures_event)
 	{
@@ -462,14 +443,6 @@ void VulkanSample::input_event(const InputEvent &input_event)
 		    (key_event.get_code() == KeyCode::PrintScreen || key_event.get_code() == KeyCode::F12))
 		{
 			screenshot(*render_context, "screenshot-" + get_name());
-		}
-
-		if (key_event.get_code() == KeyCode::F6 && key_event.get_action() == KeyAction::Down)
-		{
-			if (!graphs::generate_all(get_render_context(), *scene))
-			{
-				LOGE("Failed to save Graphs");
-			}
 		}
 	}
 }

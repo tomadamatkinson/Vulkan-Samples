@@ -524,18 +524,18 @@ void GraphicsPipelineLibrary::render(float delta_time)
 	update_uniform_buffers();
 }
 
-void GraphicsPipelineLibrary::on_update_ui_overlay(vkb::Drawer &drawer)
+void GraphicsPipelineLibrary::on_update_ui_overlay()
 {
-	if (drawer.header("Settings"))
-	{
-		(drawer.checkbox("Link time optimization", &link_time_optimization));
-		if (drawer.button("Add pipeline"))
-		{
-			// Spawn a thread to create a new pipeline in the background
-			std::thread pipeline_generation_thread(&GraphicsPipelineLibrary::pipeline_creation_threadfn, this);
-			pipeline_generation_thread.detach();
-		}
-	}
+	// if (drawer.header("Settings"))
+	// {
+	// 	(drawer.checkbox("Link time optimization", &link_time_optimization));
+	// 	if (drawer.button("Add pipeline"))
+	// 	{
+	// 		// Spawn a thread to create a new pipeline in the background
+	// 		std::thread pipeline_generation_thread(&GraphicsPipelineLibrary::pipeline_creation_threadfn, this);
+	// 		pipeline_generation_thread.detach();
+	// 	}
+	// }
 }
 
 bool GraphicsPipelineLibrary::resize(const uint32_t width, const uint32_t height)

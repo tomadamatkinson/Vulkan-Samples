@@ -770,38 +770,38 @@ void ExtendedDynamicState2::request_gpu_features(vkb::PhysicalDevice &gpu)
 }
 
 /**
- * @fn void ExtendedDynamicState2::on_update_ui_overlay(vkb::Drawer &drawer)
+ * @fn void ExtendedDynamicState2::on_update_ui_overlay()
  * @brief Projecting GUI and transferring data between GUI and app
  */
-void ExtendedDynamicState2::on_update_ui_overlay(vkb::Drawer &drawer)
+void ExtendedDynamicState2::on_update_ui_overlay()
 {
-	if (drawer.header("Settings"))
-	{
-		if (drawer.checkbox("Tessellation Enable", &gui_settings.tessellation))
-		{
-			update_uniform_buffers();
-		}
+	// if (drawer.header("Settings"))
+	// {
+	// 	if (drawer.checkbox("Tessellation Enable", &gui_settings.tessellation))
+	// 	{
+	// 		update_uniform_buffers();
+	// 	}
 
-		/* Maximum tessellation factor is set to 4.0 */
-		if (drawer.slider_float("Tessellation Factor", &gui_settings.tess_factor, 1.0f, 4.0f))
-		{
-			update_uniform_buffers();
-		}
-	}
-	if (drawer.header("Models"))
-	{
-		drawer.checkbox("Selection effect active", &gui_settings.selection_active);
-		const int                obj_cnt = static_cast<int>(scene_elements_baseline.size());
-		std::vector<std::string> obj_names;
+	// 	/* Maximum tessellation factor is set to 4.0 */
+	// 	if (drawer.slider_float("Tessellation Factor", &gui_settings.tess_factor, 1.0f, 4.0f))
+	// 	{
+	// 		update_uniform_buffers();
+	// 	}
+	// }
+	// if (drawer.header("Models"))
+	// {
+	// 	drawer.checkbox("Selection effect active", &gui_settings.selection_active);
+	// 	const int                obj_cnt = static_cast<int>(scene_elements_baseline.size());
+	// 	std::vector<std::string> obj_names;
 
-		for (int i = 0; i < obj_cnt; ++i)
-		{
-			obj_names.push_back((scene_elements_baseline[i].name).c_str());
-		}
-		drawer.combo_box("Name", &gui_settings.selected_obj, obj_names);
-		drawer.checkbox("Depth Bias Enable", &gui_settings.objects[gui_settings.selected_obj].depth_bias);
-		drawer.checkbox("Rasterizer Discard", &gui_settings.objects[gui_settings.selected_obj].rasterizer_discard);
-	}
+	// 	for (int i = 0; i < obj_cnt; ++i)
+	// 	{
+	// 		obj_names.push_back((scene_elements_baseline[i].name).c_str());
+	// 	}
+	// 	drawer.combo_box("Name", &gui_settings.selected_obj, obj_names);
+	// 	drawer.checkbox("Depth Bias Enable", &gui_settings.objects[gui_settings.selected_obj].depth_bias);
+	// 	drawer.checkbox("Rasterizer Discard", &gui_settings.objects[gui_settings.selected_obj].rasterizer_discard);
+	// }
 }
 
 /**

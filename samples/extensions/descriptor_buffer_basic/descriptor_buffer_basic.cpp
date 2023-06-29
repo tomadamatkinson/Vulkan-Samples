@@ -455,12 +455,12 @@ void DescriptorBufferBasic::render(float delta_time)
 	}
 }
 
-void DescriptorBufferBasic::on_update_ui_overlay(vkb::Drawer &drawer)
+void DescriptorBufferBasic::on_update_ui_overlay()
 {
-	if (drawer.header("Settings"))
-	{
-		drawer.checkbox("Animate", &animate);
-	}
+	// if (drawer.header("Settings"))
+	// {
+	// 	drawer.checkbox("Animate", &animate);
+	// }
 }
 
 std::unique_ptr<vkb::VulkanSample> create_descriptor_buffer_basic()
