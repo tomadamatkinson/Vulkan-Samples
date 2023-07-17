@@ -181,6 +181,9 @@ HPPDevice::HPPDevice(vkb::core::HPPPhysicalDevice               &gpu,
 	}
 
 	VmaVulkanFunctions vma_vulkan_func{};
+	vma_vulkan_func.vkGetDeviceProcAddr   = reinterpret_cast<PFN_vkGetDeviceProcAddr>(get_handle().getProcAddr("vkGetDeviceProcAddr"));
+	vma_vulkan_func.vkGetInstanceProcAddr = reinterpret_cast<PFN_vkGetInstanceProcAddr>(get_handle().getProcAddr("vkGetInstanceProcAddr"));
+
 	vma_vulkan_func.vkAllocateMemory                    = reinterpret_cast<PFN_vkAllocateMemory>(get_handle().getProcAddr("vkAllocateMemory"));
 	vma_vulkan_func.vkBindBufferMemory                  = reinterpret_cast<PFN_vkBindBufferMemory>(get_handle().getProcAddr("vkBindBufferMemory"));
 	vma_vulkan_func.vkBindImageMemory                   = reinterpret_cast<PFN_vkBindImageMemory>(get_handle().getProcAddr("vkBindImageMemory"));
@@ -239,10 +242,10 @@ HPPDevice::~HPPDevice()
 
 	if (memory_allocator != VK_NULL_HANDLE)
 	{
-		VmaStats stats;
-		vmaCalculateStats(memory_allocator, &stats);
+		VmaTotalStatistics stats;
+		vmaCalculateStatistics(memory_allocator, &stats);
 
-		LOGI("Total device memory leaked: {} bytes.", stats.total.usedBytes);
+		LOGI("Total device memory leaked: {} bytes.", stats.total.statistics.allocationBytes);
 
 		vmaDestroyAllocator(memory_allocator);
 	}

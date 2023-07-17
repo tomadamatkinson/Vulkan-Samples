@@ -1,5 +1,5 @@
-/* Copyright (c) 2019-2022, Arm Limited and Contributors
- * Copyright (c) 2019-2022, Sascha Willems
+/* Copyright (c) 2019-2023, Arm Limited and Contributors
+ * Copyright (c) 2019-2023, Sascha Willems
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -25,9 +25,9 @@ VKBP_ENABLE_WARNINGS()
 
 namespace vkb
 {
-Device::Device(PhysicalDevice &                       gpu,
+Device::Device(PhysicalDevice                        &gpu,
                VkSurfaceKHR                           surface,
-               std::unique_ptr<DebugUtils> &&         debug_utils,
+               std::unique_ptr<DebugUtils>          &&debug_utils,
                std::unordered_map<const char *, bool> requested_extensions) :
     VulkanResource{VK_NULL_HANDLE, this},        // Recursive, but valid
     debug_utils{std::move(debug_utils)},
@@ -198,6 +198,9 @@ Device::Device(PhysicalDevice &                       gpu,
 	}
 
 	VmaVulkanFunctions vma_vulkan_func{};
+	vma_vulkan_func.vkGetDeviceProcAddr   = vkGetDeviceProcAddr;
+	vma_vulkan_func.vkGetInstanceProcAddr = vkGetInstanceProcAddr;
+
 	vma_vulkan_func.vkAllocateMemory                    = vkAllocateMemory;
 	vma_vulkan_func.vkBindBufferMemory                  = vkBindBufferMemory;
 	vma_vulkan_func.vkBindImageMemory                   = vkBindImageMemory;
@@ -263,10 +266,10 @@ Device::~Device()
 
 	if (memory_allocator != VK_NULL_HANDLE)
 	{
-		VmaStats stats;
-		vmaCalculateStats(memory_allocator, &stats);
+		VmaTotalStatistics stats;
+		vmaCalculateStatistics(memory_allocator, &stats);
 
-		LOGI("Total device memory leaked: {} bytes.", stats.total.usedBytes);
+		LOGI("Total device memory leaked: {} bytes.", stats.total.statistics.allocationBytes);
 
 		vmaDestroyAllocator(memory_allocator);
 	}
@@ -306,7 +309,8 @@ DriverVersion Device::get_driver_version() const
 
 	switch (gpu.get_properties().vendorID)
 	{
-		case 0x10DE: {
+		case 0x10DE:
+		{
 			// Nvidia
 			version.major = (gpu.get_properties().driverVersion >> 22) & 0x3ff;
 			version.minor = (gpu.get_properties().driverVersion >> 14) & 0x0ff;
@@ -314,7 +318,8 @@ DriverVersion Device::get_driver_version() const
 			// Ignoring optional tertiary info in lower 6 bits
 			break;
 		}
-		default: {
+		default:
+		{
 			version.major = VK_VERSION_MAJOR(gpu.get_properties().driverVersion);
 			version.minor = VK_VERSION_MINOR(gpu.get_properties().driverVersion);
 			version.patch = VK_VERSION_PATCH(gpu.get_properties().driverVersion);

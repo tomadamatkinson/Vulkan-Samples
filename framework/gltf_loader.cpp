@@ -29,6 +29,8 @@ VKBP_DISABLE_WARNINGS()
 #include <glm/gtc/type_ptr.hpp>
 VKBP_ENABLE_WARNINGS()
 
+#include <core/util/profiling.hpp>
+
 #include "api_vulkan_sample.h"
 #include "common/logging.h"
 #include "common/utils.h"
@@ -406,6 +408,8 @@ GLTFLoader::GLTFLoader(Device const &device) :
 
 std::unique_ptr<sg::Scene> GLTFLoader::read_scene_from_file(const std::string &file_name, int scene_index)
 {
+	PROFILE_SCOPE("Load GLTF Scene");
+
 	std::string err;
 	std::string warn;
 
@@ -448,6 +452,8 @@ std::unique_ptr<sg::Scene> GLTFLoader::read_scene_from_file(const std::string &f
 
 std::unique_ptr<sg::SubMesh> GLTFLoader::read_model_from_file(const std::string &file_name, uint32_t index, bool storage_buffer)
 {
+	PROFILE_SCOPE("Load GLTF Model");
+
 	std::string err;
 	std::string warn;
 

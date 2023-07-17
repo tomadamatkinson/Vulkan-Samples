@@ -17,13 +17,19 @@
 vkb__register_component(
     NAME core
     HEADERS
-        include/core/util/strings.hpp
+        include/core/platform/context.hpp
+        include/core/platform/entrypoint.hpp
+
         include/core/util/error.hpp
         include/core/util/hash.hpp
+        include/core/util/profiling.hpp
+        include/core/util/strings.hpp
     SRC
         src/strings.cpp
+        src/profiling.cpp
     LINK_LIBS
         spdlog::spdlog
+        TracyClient
 )
 
 vkb__register_tests(

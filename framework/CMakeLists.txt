@@ -518,7 +518,7 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     glm
     glslang
     SPIRV
-    vma
+    VulkanMemoryAllocator
     hwcpipe
     spirv-cross-glsl
     glslang-default-resource-limits

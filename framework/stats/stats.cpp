@@ -17,10 +17,16 @@
  */
 
 #include "stats/stats.h"
-#include "core/device.h"
+#include <sstream>
 
+#include <core/util/profiling.hpp>
+#include <vk_mem_alloc.h>
+#include <vulkan/vulkan.hpp>
+
+#include "core/device.h"
 #include "frame_time_stats_provider.h"
 #include "hwcpipe_stats_provider.h"
+#include "rendering/render_context.h"
 #include "vulkan_stats_provider.h"
 
 namespace vkb
@@ -217,6 +223,8 @@ void Stats::update(float delta_time)
 			break;
 		}
 	}
+
+	profile_counters();
 }
 
 void Stats::continuous_sampling_worker(std::future<void> should_terminate)
@@ -276,6 +284,154 @@ void Stats::push_sample(const StatsProvider::Counters &sample)
 		float measurement = static_cast<float>(smp->second.result);
 
 		add_smoothed_value(values, measurement, alpha_smoothing);
+	}
+}
+
+namespace
+{
+// For now names are taken from the stats_provider.cpp file
+const char *to_string(StatIndex index)
+{
+	switch (index)
+	{
+		case StatIndex::frame_times:
+			return "Frame Times (ms)";
+		case StatIndex::cpu_cycles:
+			return "CPU Cycles (M/s)";
+		case StatIndex::cpu_instructions:
+			return "CPU Instructions (M/s)";
+		case StatIndex::cpu_cache_miss_ratio:
+			return "Cache Miss Ratio (%)";
+		case StatIndex::cpu_branch_miss_ratio:
+			return "Branch Miss Ratio (%)";
+		case StatIndex::cpu_l1_accesses:
+			return "CPU L1 Accesses (M/s)";
+		case StatIndex::cpu_instr_retired:
+			return "CPU Instructions Retired (M/s)";
+		case StatIndex::cpu_l2_accesses:
+			return "CPU L2 Accesses (M/s)";
+		case StatIndex::cpu_l3_accesses:
+			return "CPU L3 Accesses (M/s)";
+		case StatIndex::cpu_bus_reads:
+			return "CPU Bus Read Beats (M/s)";
+		case StatIndex::cpu_bus_writes:
+			return "CPU Bus Write Beats (M/s)";
+		case StatIndex::cpu_mem_reads:
+			return "CPU Memory Read Instructions (M/s)";
+		case StatIndex::cpu_mem_writes:
+			return "CPU Memory Write Instructions (M/s)";
+		case StatIndex::cpu_ase_spec:
+			return "CPU Speculatively Exec. SIMD Instructions (M/s)";
+		case StatIndex::cpu_vfp_spec:
+			return "CPU Speculatively Exec. FP Instructions (M/s)";
+		case StatIndex::cpu_crypto_spec:
+			return "CPU Speculatively Exec. Crypto Instructions (M/s)";
+		case StatIndex::gpu_cycles:
+			return "GPU Cycles (M/s)";
+		case StatIndex::gpu_vertex_cycles:
+			return "Vertex Cycles (M/s)";
+		case StatIndex::gpu_load_store_cycles:
+			return "Load Store Cycles (k/s)";
+		case StatIndex::gpu_tiles:
+			return "Tiles (k/s)";
+		case StatIndex::gpu_killed_tiles:
+			return "Tiles killed by CRC match (k/s)";
+		case StatIndex::gpu_fragment_jobs:
+			return "Fragment Jobs (s)";
+		case StatIndex::gpu_fragment_cycles:
+			return "Fragment Cycles (M/s)";
+		case StatIndex::gpu_tex_cycles:
+			return "Shader Texture Cycles (k/s)";
+		case StatIndex::gpu_ext_reads:
+			return "External Reads (M/s)";
+		case StatIndex::gpu_ext_writes:
+			return "External Writes (M/s)";
+		case StatIndex::gpu_ext_read_stalls:
+			return "External Read Stalls (M/s)";
+		case StatIndex::gpu_ext_write_stalls:
+			return "External Write Stalls (M/s)";
+		case StatIndex::gpu_ext_read_bytes:
+			return "External Read Bytes (MiB/s)";
+		case StatIndex::gpu_ext_write_bytes:
+			return "External Write Bytes (MiB/s)";
+		default:
+			return nullptr;
+	}
+}
+}        // namespace
+
+void Stats::profile_counters() const
+{
+	static std::chrono::high_resolution_clock::time_point last_time = std::chrono::high_resolution_clock::now();
+	std::chrono::high_resolution_clock::time_point        now       = std::chrono::high_resolution_clock::now();
+
+	if (now - last_time < std::chrono::milliseconds(100))
+	{
+		return;
+	}
+
+	last_time = now;
+
+	for (auto &c : counters)
+	{
+		StatIndex idx        = c.first;
+		auto     &graph_data = get_graph_data(idx);
+
+		if (c.second.empty())
+		{
+			continue;
+		}
+
+		float average = 0.0f;
+		for (auto &v : c.second)
+		{
+			average += v;
+		}
+		average /= c.second.size();
+
+		if (auto *index_name = to_string(idx))
+		{
+			Plot<float>::plot(index_name, average * graph_data.scale_factor, tracy::PlotFormatType::Number);
+		}
+	}
+
+	static std::vector<std::string> labels;
+
+	auto        &device    = render_context.get_device();
+	VmaAllocator allocator = device.get_memory_allocator();
+
+	VmaBudget heap_budgets[VK_MAX_MEMORY_HEAPS];
+	vmaGetHeapBudgets(allocator, heap_budgets);
+
+	// We know that we will only ever have one device in the system, so we can cache the labels
+	if (labels.size() == 0)
+	{
+		VkPhysicalDeviceMemoryProperties memory_properties;
+		vkGetPhysicalDeviceMemoryProperties(device.get_gpu().get_handle(), &memory_properties);
+
+		labels.reserve(memory_properties.memoryHeapCount);
+
+		for (size_t heap = 0; heap < memory_properties.memoryHeapCount; heap++)
+		{
+			VkMemoryPropertyFlags flags = 0;
+			for (size_t type = 0; type < memory_properties.memoryTypeCount; type++)
+			{
+				if (memory_properties.memoryTypes[type].heapIndex == heap)
+				{
+					flags |= memory_properties.memoryTypes[type].propertyFlags;
+				}
+			}
+
+			// TODO: Using VulkanHPP to_string here instead of vkb::to_string. After deciding on the framework direction we should adjust this
+			std::stringstream ss;
+			ss << "Heap " << heap << " " << vk::to_string(vk::MemoryPropertyFlags{flags});
+			labels.push_back(ss.str());
+		}
+	}
+
+	for (size_t heap = 0; heap < labels.size(); heap++)
+	{
+		Plot<float>::plot(labels[heap].c_str(), heap_budgets[heap].usage / (1024.0f * 1024.0f), tracy::PlotFormatType::Memory);
 	}
 }
 
