@@ -1,5 +1,7 @@
 #include <scene_graph/scene_graph.hpp>
 
+#include <scene_graph/components/mesh.hpp>
+
 namespace vkb
 {
 
