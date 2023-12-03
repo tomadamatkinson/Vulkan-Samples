@@ -14,16 +14,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-add_subdirectory(core)
+vkb__register_component(
+    NAME scene_graph
+    SRC
+        src/entt.cpp
+        src/scene_graph.cpp
+    LINK_LIBS
+        vkb__core
+        EnTT
+        glm
+)
 
-if(ANDROID)
-    add_subdirectory(android)
-elseif(WIN32)
-    add_subdirectory(windows)
-elseif(APPLE OR UNIX)
-    add_subdirectory(unix)
-else()
-    message(FATAL_ERROR "Unsupported platform")
-endif()
 
-add_subdirectory(scene_graph)
+vkb__register_tests(
+    COMPONENT scene_graph
+    NAME scene_graph
+    SRC
+        tests/scene_graph.test.cpp
+    LINK_LIBS
+        vkb__scene_graph
+)

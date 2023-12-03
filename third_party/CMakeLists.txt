@@ -373,3 +373,7 @@ target_include_directories(opencl INTERFACE ${OPENCL_INCLUDE_DIR})
 add_subdirectory(catch2)
 set_property(TARGET Catch2 PROPERTY FOLDER "ThirdParty")
 set_property(TARGET Catch2WithMain PROPERTY FOLDER "ThirdParty")
+
+# EnTT
+add_subdirectory(entt)
+set_property(TARGET EnTT PROPERTY FOLDER "ThirdParty")
