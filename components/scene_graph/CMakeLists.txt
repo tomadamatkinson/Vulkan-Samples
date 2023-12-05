@@ -17,12 +17,22 @@
 vkb__register_component(
     NAME scene_graph
     SRC
+        # Scene Graph
         src/entt.cpp
         src/scene_graph.cpp
+
+        # Loaders
+        src/loaders/gltf.cpp
+        src/loaders/astc.cpp
+        src/loaders/ktx.cpp
+        src/loaders/stb.cpp
+
     LINK_LIBS
         vkb__core
         EnTT
         glm
+        vulkan
+        stb
 )
 
 
@@ -31,6 +41,15 @@ vkb__register_tests(
     NAME scene_graph
     SRC
         tests/scene_graph.test.cpp
+    LINK_LIBS
+        vkb__scene_graph
+)
+
+vkb__register_tests(
+    COMPONENT scene_graph
+    NAME loaders
+    SRC
+        tests/stb.test.cpp
     LINK_LIBS
         vkb__scene_graph
 )

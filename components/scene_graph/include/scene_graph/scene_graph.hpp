@@ -12,6 +12,8 @@
 
 namespace vkb
 {
+namespace sg
+{
 
 struct Transform
 {
@@ -87,4 +89,5 @@ class SceneGraph
 	RegistryPtr m_registry;
 };
 
+}        // namespace sg
 }        // namespace vkb

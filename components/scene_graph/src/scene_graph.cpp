@@ -4,7 +4,8 @@
 
 namespace vkb
 {
-
+namespace sg
+{
 NodePtr Node::create(NodePtr parent)
 {
 	auto ptr = std::shared_ptr<Node>(new Node());
@@ -117,4 +118,5 @@ void SceneGraph::remove_root(NodePtr root)
 	m_roots.erase(root);
 }
 
+}        // namespace sg
 }        // namespace vkb

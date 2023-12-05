@@ -27,18 +27,12 @@
 #include <glm/glm.hpp>
 #include <vulkan/vulkan.hpp>
 
+#include "scene_graph/assets/image.hpp"
+
 namespace vkb
 {
-
-// A buffer of raw data
-// The data is not owned by the buffer
-// The buffer is not responsible for freeing the data
-struct Data
+namespace sg
 {
-	std::shared_ptr<std::vector<uint8_t>> raw;
-	size_t                                offset;
-	size_t                                size;
-};
 
 // How the alpha value of the main factor and texture should be interpreted
 enum class AlphaMode
@@ -72,21 +66,9 @@ struct Texture
 		float                  max_lod{0.0f};
 		vk::BorderColor        border_color{vk::BorderColor::eFloatOpaqueWhite};
 		bool                   unnormalized_coordinates{false};
-	};
+	} sampler;
 
-	struct Image
-	{
-		vk::Format format;
-		uint32_t   width;
-		uint32_t   height;
-		uint32_t   depth;
-		uint32_t   layers;
-		uint32_t   levels;
-
-		vk::SampleCountFlags samples;
-
-		Data data;
-	};
+	Image image;
 };
 
 // A mesh is a collection of vertices and indices
@@ -98,13 +80,13 @@ struct Mesh
 	{
 		vk::IndexType type{vk::IndexType::eUint16};
 		uint32_t      count{0U};
-		Data          data;
+		DataView      data;
 
 	} indices;
 
 	struct Vertex
 	{
-		Data data;
+		DataView data;
 
 		// A vertex attribute is a piece of data associated with a vertex
 		// It describes the usecase of the data
@@ -141,5 +123,5 @@ struct Mesh
 		float roughness_factor{0.0f};
 	} material;
 };
-
+}        // namespace sg
 }        // namespace vkb

@@ -4,14 +4,14 @@
 
 inline void reset()
 {
-	vkb::SceneGraph::get()->reset();
+	vkb::sg::SceneGraph::get()->reset();
 }
 
 TEST_CASE("SceneGraph", "[scene_graph]")
 {
 	SECTION("When a scene graph is created, it should have a valid registry")
 	{
-		auto *scene_graph = vkb::SceneGraph::get();
+		auto *scene_graph = vkb::sg::SceneGraph::get();
 		REQUIRE(scene_graph != nullptr);
 
 		auto registry = scene_graph->registry();
@@ -22,19 +22,19 @@ TEST_CASE("SceneGraph", "[scene_graph]")
 
 	SECTION("When a node is created it should be added as a root node")
 	{
-		auto parent = vkb::Node::create();
-		REQUIRE(vkb::SceneGraph::get()->roots().size() == 1);
+		auto parent = vkb::sg::Node::create();
+		REQUIRE(vkb::sg::SceneGraph::get()->roots().size() == 1);
 
 		reset();
 	}
 
 	SECTION("When a node is created with a parent it should be added as a child node")
 	{
-		auto parent = vkb::Node::create();
-		auto child  = vkb::Node::create(parent);
+		auto parent = vkb::sg::Node::create();
+		auto child  = vkb::sg::Node::create(parent);
 
 		// Only one node is the root node (parent)
-		REQUIRE(vkb::SceneGraph::get()->roots().size() == 1);
+		REQUIRE(vkb::sg::SceneGraph::get()->roots().size() == 1);
 
 		REQUIRE(child->parent() == parent);
 		REQUIRE(parent->children().size() == 1);
@@ -48,7 +48,7 @@ TEST_CASE("Transform", "[scene_graph]")
 {
 	SECTION("When a transform is created, it should have a valid translation, rotation and scale")
 	{
-		auto transform = vkb::Transform();
+		auto transform = vkb::sg::Transform();
 		REQUIRE(transform.translation == glm::vec3(0.0, 0.0, 0.0));
 		REQUIRE(transform.rotation == glm::quat(1.0, 0.0, 0.0, 0.0));
 		REQUIRE(transform.scale == glm::vec3(1.0, 1.0, 1.0));
@@ -56,7 +56,7 @@ TEST_CASE("Transform", "[scene_graph]")
 
 	SECTION("When a transform is created, it should have a valid world matrix")
 	{
-		auto node = vkb::Node::create();
+		auto node = vkb::sg::Node::create();
 
 		auto &transform       = node->transform();
 		transform.translation = glm::vec3(1.0, 2.0, 3.0);
@@ -72,8 +72,8 @@ TEST_CASE("Transform", "[scene_graph]")
 
 	SECTION("Require world matrix to be calculated using parent", "[scene_graph]")
 	{
-		auto parent = vkb::Node::create();
-		auto child  = vkb::Node::create(parent);
+		auto parent = vkb::sg::Node::create();
+		auto child  = vkb::sg::Node::create(parent);
 
 		auto &parent_transform       = parent->transform();
 		parent_transform.translation = glm::vec3(1.0, 2.0, 3.0);
@@ -102,7 +102,7 @@ TEST_CASE("Node", "[scene_graph]")
 {
 	SECTION("When a node is created, it should have a valid entity")
 	{
-		auto node = vkb::Node::create();
+		auto node = vkb::sg::Node::create();
 		REQUIRE((node->entity() != entt::null));
 
 		reset();
@@ -110,11 +110,11 @@ TEST_CASE("Node", "[scene_graph]")
 
 	SECTION("A node can have several children")
 	{
-		auto child_1 = vkb::Node::create();
-		auto child_2 = vkb::Node::create();
-		auto child_3 = vkb::Node::create();
+		auto child_1 = vkb::sg::Node::create();
+		auto child_2 = vkb::sg::Node::create();
+		auto child_3 = vkb::sg::Node::create();
 
-		auto parent = vkb::Node::create();
+		auto parent = vkb::sg::Node::create();
 
 		child_1->reparent(parent);
 		child_2->reparent(parent);
@@ -130,8 +130,8 @@ TEST_CASE("Node", "[scene_graph]")
 
 	SECTION("A node can have a parent")
 	{
-		auto child  = vkb::Node::create();
-		auto parent = vkb::Node::create();
+		auto child  = vkb::sg::Node::create();
+		auto parent = vkb::sg::Node::create();
 
 		child->reparent(parent);
 
@@ -142,9 +142,9 @@ TEST_CASE("Node", "[scene_graph]")
 
 	SECTION("A node can be reparented")
 	{
-		auto child   = vkb::Node::create();
-		auto parent1 = vkb::Node::create();
-		auto parent2 = vkb::Node::create();
+		auto child   = vkb::sg::Node::create();
+		auto parent1 = vkb::sg::Node::create();
+		auto parent2 = vkb::sg::Node::create();
 
 		child->reparent(parent1);
 		REQUIRE(child->parent() == parent1);
