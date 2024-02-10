@@ -20,11 +20,11 @@
 set(SCRIPT_DIR ${CMAKE_CURRENT_LIST_DIR})
 
 function(add_sample)
-    set(options)  
+    set(options)
     set(oneValueArgs ID CATEGORY AUTHOR NAME DESCRIPTION)
-    set(multiValueArgs FILES LIBS SHADER_FILES_GLSL)
+    set(multiValueArgs FILES LIBS SHADER_FILES_GLSL SHADER_FILES_HLSL)
 
-    cmake_parse_arguments(TARGET "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})    
+    cmake_parse_arguments(TARGET "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
     add_sample_with_tags(
         TYPE "Sample"
@@ -33,20 +33,22 @@ function(add_sample)
         AUTHOR ${TARGET_AUTHOR}
         NAME ${TARGET_NAME}
         DESCRIPTION ${TARGET_DESCRIPTION}
-        TAGS 
+        TAGS
             "any"
         FILES
             ${SRC_FILES}
         LIBS
             ${TARGET_LIBS}
         SHADER_FILES_GLSL
-            ${TARGET_SHADER_FILES_GLSL})
+            ${TARGET_SHADER_FILES_GLSL}
+        SHADER_FILES_HLSL
+            ${TARGET_SHADER_FILES_HLSL})
 endfunction()
 
 function(add_sample_with_tags)
     set(options)
     set(oneValueArgs ID CATEGORY AUTHOR NAME DESCRIPTION)
-    set(multiValueArgs TAGS FILES LIBS SHADER_FILES_GLSL)
+    set(multiValueArgs TAGS FILES LIBS SHADER_FILES_GLSL SHADER_FILES_HLSL)
 
     cmake_parse_arguments(TARGET "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
@@ -63,11 +65,19 @@ function(add_sample_with_tags)
     endif()
 
     # Add GLSL shader files for this sample
-    if (TARGET_SHADER_FILES_GLSL)    
+    if (TARGET_SHADER_FILES_GLSL)
         list(APPEND SHADER_FILES_GLSL ${TARGET_SHADER_FILES_GLSL})
         foreach(SHADER_FILE_GLSL ${SHADER_FILES_GLSL})
             list(APPEND SHADERS_GLSL "${PROJECT_SOURCE_DIR}/shaders/${SHADER_FILE_GLSL}")
-        endforeach()        
+        endforeach()
+    endif()
+
+    # Add HLSL shader files for this sample
+    if (TARGET_SHADER_FILES_HLSL)
+        list(APPEND SHADER_FILES_HLSL ${TARGET_SHADER_FILES_HLSL})
+        foreach(SHADER_FILE_HLSL ${SHADER_FILES_HLSL})
+            list(APPEND SHADERS_HLSL "${PROJECT_SOURCE_DIR}/shaders/${SHADER_FILE_HLSL}")
+        endforeach()
     endif()
 
     add_project(
@@ -77,15 +87,16 @@ function(add_sample_with_tags)
         AUTHOR ${TARGET_AUTHOR}
         NAME ${TARGET_NAME}
         DESCRIPTION ${TARGET_DESCRIPTION}
-        TAGS 
+        TAGS
             ${TARGET_TAGS}
         FILES
             ${SRC_FILES}
         LIBS
             ${TARGET_LIBS}
         SHADERS_GLSL
-            ${SHADERS_GLSL})
-
+            ${SHADERS_GLSL}
+        SHADERS_HLSL
+            ${SHADERS_HLSL})
 endfunction()
 
 function(vkb_add_test)
@@ -110,9 +121,9 @@ function(vkb_add_test)
 endfunction()
 
 function(add_project)
-    set(options)  
+    set(options)
     set(oneValueArgs TYPE ID CATEGORY AUTHOR NAME DESCRIPTION)
-    set(multiValueArgs TAGS FILES LIBS SHADERS_GLSL)
+    set(multiValueArgs TAGS FILES LIBS SHADERS_GLSL SHADERS_HLSL)
 
     cmake_parse_arguments(TARGET "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
@@ -137,7 +148,13 @@ function(add_project)
         source_group("\\Shaders" FILES ${SHADERS_GLSL})
     endif()
 
-    add_library(${PROJECT_NAME} OBJECT ${TARGET_FILES} ${SHADERS_GLSL})
+    if (SHADERS_HLSL)
+        source_group("\\Shaders" FILES ${SHADERS_HLSL})
+        # Without this line, MSVC will automatically try to compile the shaders and fail
+        set_source_files_properties(${SHADERS_HLSL} PROPERTIES VS_TOOL_OVERRIDE "None")
+    endif()
+
+    add_library(${PROJECT_NAME} OBJECT ${TARGET_FILES} ${SHADERS_GLSL} ${SHADERS_HLSL})
     set_target_properties(${PROJECT_NAME} PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
     # # inherit include directories from framework target
@@ -149,7 +166,7 @@ function(add_project)
         target_link_libraries(${PROJECT_NAME} PUBLIC ${TARGET_LIBS})
     endif()
 
-    # capitalise the first letter of the category  (performance -> Performance) 
+    # capitalise the first letter of the category  (performance -> Performance)
     string(SUBSTRING ${TARGET_CATEGORY} 0 1 FIRST_LETTER)
     string(TOUPPER ${FIRST_LETTER} FIRST_LETTER)
     string(REGEX REPLACE "^.(.*)" "${FIRST_LETTER}\\1" CATEGORY "${TARGET_CATEGORY}")
@@ -157,7 +174,7 @@ function(add_project)
     if(${TARGET_TYPE} STREQUAL "Sample")
         # set sample properties
         set_target_properties(${PROJECT_NAME}
-            PROPERTIES 
+            PROPERTIES
                 SAMPLE_CATEGORY ${TARGET_CATEGORY}
                 SAMPLE_AUTHOR ${TARGET_AUTHOR}
                 SAMPLE_NAME ${TARGET_NAME}
