@@ -1,3 +1,8 @@
+// Unless we want to apply _CRT_SECURE_NO_WARNINGS to the project as a whole from the CMakeLists.txt this needs to be here
+// It MUST be defined before the declaration of `getenv`, not just before the usage, hence it's here.
+#if defined(_MSC_VER)
+#	define _CRT_SECURE_NO_WARNINGS
+#endif
 #include "core/util/logging.hpp"
 
 #ifdef PLATFORM__ANDROID
@@ -13,7 +18,7 @@ namespace logging
 void init()
 {
 	// Load logger from environment variables
-	char *env = getenv("VKB_LEVEL");
+	char *env = std::getenv("VKB_LEVEL");
 	if (env)
 	{
 		std::string levelStr = env;
