@@ -16,6 +16,7 @@
 
 ## Bucket target for all components
 add_custom_target(vkb__components)
+set_target_properties(vkb__components PROPERTIES FOLDER "CMake/CustomTargets")
 
 # Create a new component
 # Adds the component to the vkb__components target
@@ -91,6 +92,7 @@ endmacro()
 
 # Bucket target for all tests
 add_custom_target(vkb__tests)
+set_target_properties(vkb__tests PROPERTIES FOLDER "CMake/CustomTargets")
 
 # Register a new test
 # Adds the test to the vkb__tests target

@@ -1,6 +1,9 @@
 add_custom_target(shaders)
+set_target_properties(shaders PROPERTIES FOLDER "CMake/CustomTargets")
 add_custom_target(shader_reflections)
+set_target_properties(shader_reflections PROPERTIES FOLDER "CMake/CustomTargets")
 add_custom_target(shaders_full)
+set_target_properties(shaders_full PROPERTIES FOLDER "CMake/CustomTargets")
 add_dependencies(shaders_full shaders shader_reflections)
 
 # Require Python 3 for calling shader compile script
@@ -20,6 +23,7 @@ add_custom_target(
     COMMAND variant_reflector --output ${SHADER_VARIANT_FILE} --shader-dir ${SHADER_DIR} --asset-dir ${ASSET_DIR}
     COMMAND_EXPAND_LISTS
 )
+set_target_properties(generate_shader_variants PROPERTIES FOLDER "CMake/CustomTargets")
 
 # configure_shader(
 #   NAME <target_name>
@@ -55,7 +59,7 @@ function(configure_shader)
     endif()
 
     string(TOUPPER ${LANGUAGE} CAPITALIZED_LANGAUGE)
-    
+
     set(SHADER_TARGET_NAME ${CAPITALIZED_LANGAUGE}__${TARGET_NAME})
     message(STATUS "Shader ${SHADER_TARGET_NAME}")
 
@@ -68,6 +72,7 @@ function(configure_shader)
         DEPENDS ${TARGET_SOURCE} generate_shader_variants
         COMMENT "Compiling shader ${SOURCE_NAME}"
     )
+    set_target_properties(${SHADER_TARGET_NAME} PROPERTIES FOLDER "CMake/CustomTargets/Shaders_")
 
     add_custom_target(
         ${SHADER_TARGET_NAME}_reflection
@@ -75,6 +80,7 @@ function(configure_shader)
         DEPENDS ${SHADER_TARGET_NAME} shader_reflector
         COMMENT "Generating shader reflection for ${SHADER_SPIRV}"
     )
+    set_target_properties(${SHADER_TARGET_NAME}_reflection PROPERTIES FOLDER "CMake/CustomTargets/Shaders_")
 
     add_dependencies(shaders ${SHADER_TARGET_NAME})
     add_dependencies(shader_reflections ${SHADER_TARGET_NAME}_reflection)

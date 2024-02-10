@@ -1,6 +1,6 @@
 
 add_executable(variant_reflector main.cpp)
-
+set_target_properties(variant_reflector PROPERTIES FOLDER "BuildTools")
 target_link_libraries(variant_reflector
     PRIVATE
         vkb__core
