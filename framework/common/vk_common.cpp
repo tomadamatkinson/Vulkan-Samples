@@ -378,21 +378,34 @@ VkShaderModule load_shader(const std::string &filename, VkDevice device, VkShade
 {
 	vkb::GLSLCompiler glsl_compiler;
 
-	auto buffer = vkb::fs::read_shader_binary(filename);
-
-	std::string file_ext = filename;
-
-	// Extract extension name from the glsl shader file
-	file_ext = file_ext.substr(file_ext.find_last_of(".") + 1);
-
 	std::vector<uint32_t> spirv;
-	std::string           info_log;
 
-	// Compile the GLSL source
-	if (!glsl_compiler.compile_to_spirv(vkb::find_shader_stage(file_ext), buffer, "main", {}, spirv, info_log))
+	// Check if the shader has already been compiled to SPIR-V
+	if (vkb::fs::is_file("./shaders/" + filename + ".spv"))
 	{
-		LOGE("Failed to compile shader, Error: {}", info_log.c_str());
-		return VK_NULL_HANDLE;
+		LOGI("Loading precompiled shader: {}", filename + ".spv");
+		auto buffer = vkb::fs::read_shader_binary(filename + ".spv");
+		spirv       = {reinterpret_cast<uint32_t *>(buffer.data()), reinterpret_cast<uint32_t *>(buffer.data() + buffer.size())};
+	}
+	else
+	{
+		// Online compile
+
+		auto buffer = vkb::fs::read_shader_binary(filename);
+
+		std::string file_ext = filename;
+
+		// Extract extension name from the glsl shader file
+		file_ext = file_ext.substr(file_ext.find_last_of(".") + 1);
+
+		std::string info_log;
+
+		// Compile the GLSL source
+		if (!glsl_compiler.compile_to_spirv(vkb::find_shader_stage(file_ext), buffer, "main", {}, spirv, info_log))
+		{
+			LOGE("Failed to compile shader, Error: {}", info_log.c_str());
+			return VK_NULL_HANDLE;
+		}
 	}
 
 	VkShaderModule           shader_module;
